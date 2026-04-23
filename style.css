@@ -1,3 +1,4 @@
+/* (Mantené el inicio igual) */
 body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background: radial-gradient(circle at center, #00b4db, #0083b0); font-family: 'Segoe UI', sans-serif; }
 #desktop { width: 100vw; height: 100vh; position: relative; }
 
@@ -8,26 +9,37 @@ body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background: 
 .app-visual { width: 60px; height: 60px; background: linear-gradient(135deg, #ffffff, #a5a5a5); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 30px; border: 2px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
 .label { margin-top: 8px; color: white; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 
-/* VENTANA GIGANTE AERO */
+/* VENTANA GIGANTE AERO - FIX POSICIÓN */
 .aero-window {
     width: 90vw; height: 80vh; max-width: 1100px; max-height: 750px;
     background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(25px) saturate(150%);
     border-radius: 30px; border: 2px solid rgba(255, 255, 255, 0.4);
     box-shadow: 0 40px 100px rgba(0,0,0,0.5);
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    
+    /* Centrado absoluto inicial sin transform para no chocar con el drag */
+    position: fixed; 
+    top: 50%; left: 50%;
+    margin-left: -45vw; /* Mitad del width */
+    margin-top: -40vh;  /* Mitad del height */
+    
     display: flex; flex-direction: column; z-index: 9500; overflow: hidden;
     animation: windowOpen 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-@keyframes windowOpen { from { transform: translate(-50%, -45%) scale(0.95); opacity: 0; } to { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
+/* Ajuste manual del margen en pantallas grandes para que no se desfase */
+@media (min-width: 1222px) {
+    .aero-window { margin-left: -550px; margin-top: -375px; }
+}
 
-.window-header { padding: 20px; background: rgba(255,255,255,0.15); display: flex; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.2); }
+@keyframes windowOpen { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+.window-header { padding: 20px; background: rgba(255,255,255,0.15); display: flex; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.2); cursor: grab; }
 .traffic-lights { display: flex; gap: 12px; margin-right: 25px; }
 .light { width: 16px; height: 16px; border-radius: 50%; cursor: pointer; }
 .light.close { background: #ff5f56; }
 .light.minimize { background: #ffbd2e; }
 .light.maximize { background: #27c93f; }
-.window-title { color: white; font-size: 15px; font-weight: bold; }
+.window-title { color: white; font-size: 15px; font-weight: bold; pointer-events: none; }
 
 .window-content { flex: 1; overflow-y: auto; padding: 50px; color: white; }
 .bio-layout { display: flex; gap: 50px; align-items: center; }
@@ -35,9 +47,8 @@ body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background: 
 .bio-text { flex: 1; font-size: 18px; line-height: 1.6; }
 .bio-text h2 { font-size: 40px; margin-bottom: 15px; }
 
-/* FOTOS Y FULLSCREEN */
+/* (Mantener project-card y fullscreen igual) */
 .project-card { height: 60vh; width: auto; aspect-ratio: 4/5; position: absolute; cursor: pointer; background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(8px); border: 2px solid rgba(255, 255, 255, 0.7); border-radius: 20px; z-index: 9000 !important; animation: flashPop 0.2s ease-out forwards; }
 @keyframes flashPop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 #project-fullscreen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9); z-index: 10000; display: flex; align-items: center; justify-content: center; }
 #project-content img { height: 85vh; border-radius: 20px; border: 4px solid white; }
-.close-fs { position: absolute; top: 20px; right: 20px; padding: 12px 30px; background: #ff00cc; color: white; border: none; border-radius: 40px; cursor: pointer; font-weight: bold; }
