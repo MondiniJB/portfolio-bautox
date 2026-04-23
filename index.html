@@ -3,27 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio OS - Aero Edition</title>
+    <title>Portfolio - Frutiger Aero Edition</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div id="desktop">
-        <div class="folder draggable" id="folder1" onclick="openProject('tipo', event)">
-            <div class="icon"></div>
-            <span class="label">Tipografía_Book</span>
+        <div class="folder draggable" id="f-tipo" onclick="toggleProject('tipo', this)">
+            <div class="icon-container">
+                <div class="icon folder-closed"></div>
+                <div class="icon-open"></div>
+            </div>
+            <span class="label">Tipografía</span>
         </div>
 
-        <div class="folder draggable" id="folder2" onclick="openProject('branding', event)">
-            <div class="icon"></div>
-            <span class="label">Proyecto_Branding</span>
+        <div class="folder draggable" id="f-branding" onclick="toggleProject('branding', this)">
+            <div class="icon-container">
+                <div class="icon folder-closed"></div>
+                <div class="icon-open"></div>
+            </div>
+            <span class="label">Branding</span>
+        </div>
+
+        <div class="folder draggable" id="f-editorial" onclick="toggleProject('editorial', this)">
+            <div class="icon-container">
+                <div class="icon folder-closed"></div>
+                <div class="icon-open"></div>
+            </div>
+            <span class="label">Editorial</span>
+        </div>
+
+        <div class="folder draggable" id="f-packaging" onclick="toggleProject('packaging', this)">
+            <div class="icon-container">
+                <div class="icon folder-closed"></div>
+                <div class="icon-open"></div>
+            </div>
+            <span class="label">Packaging</span>
+        </div>
+
+        <div class="folder draggable" id="f-social" onclick="toggleProject('social', this)">
+            <div class="icon-container">
+                <div class="icon folder-closed"></div>
+                <div class="icon-open"></div>
+            </div>
+            <span class="label">Social Media</span>
         </div>
 
         <div id="floating-gallery"></div>
     </div>
 
     <div id="project-fullscreen" style="display:none;">
-        <button class="close-fs" onclick="closeFullscreen()">✕ Cerrar</button>
+        <button class="close-fs" onclick="closeFullscreen()">✕</button>
         <div id="project-content"></div>
     </div>
 
