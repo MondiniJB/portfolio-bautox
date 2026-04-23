@@ -2,8 +2,8 @@ let isDragging = false;
 let currentCategory = null;
 
 const content = {
-    tipo: [{img: 'https://picsum.photos/600/800?random=1'}, {img: 'https://picsum.photos/600/800?random=11'}],
-    branding: [{img: 'https://picsum.photos/600/800?random=2'}, {img: 'https://picsum.photos/600/800?random=22'}],
+    tipo: [{img: 'https://picsum.photos/600/800?random=1'}],
+    branding: [{img: 'https://picsum.photos/600/800?random=2'}],
     editorial: [{img: 'https://picsum.photos/600/800?random=3'}],
     packaging: [{img: 'https://picsum.photos/600/800?random=4'}],
     social: [{img: 'https://picsum.photos/600/800?random=5'}]
@@ -25,8 +25,10 @@ function openAbout(event) {
     if (isDragging) return;
     const win = document.getElementById('about-window');
     win.style.display = 'flex';
-    win.style.top = '50%'; win.style.left = '50%';
-    win.setAttribute('data-x', 0); win.setAttribute('data-y', 0);
+    // Limpiamos transforms previos para que abra siempre pura
+    win.style.transform = 'scale(1)';
+    win.setAttribute('data-x', 0);
+    win.setAttribute('data-y', 0);
 }
 
 function closeAbout() { document.getElementById('about-window').style.display = 'none'; }
@@ -65,19 +67,25 @@ function openFullscreen(proj) {
 
 function closeFullscreen() { document.getElementById('project-fullscreen').style.display = 'none'; }
 
+// DRAG AND DROP FINAL
 interact('.draggable').draggable({
     listeners: {
-        start(event) { isDragging = true; event.target.style.zIndex = "9001"; },
+        start(event) { 
+            isDragging = true; 
+            event.target.style.zIndex = "9001"; 
+        },
         move(event) {
             const target = event.target;
+            // Recuperamos la posición actual
             const x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
             const y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-            if (target.classList.contains('aero-window')) {
-                target.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
-            } else {
-                target.style.transform = `translate(${x}px, ${y}px)`;
-            }
-            target.setAttribute('data-x', x); target.setAttribute('data-y', y);
+
+            // Aplicamos el movimiento puro
+            target.style.transform = `translate(${x}px, ${y}px)`;
+
+            // Guardamos para el siguiente frame
+            target.setAttribute('data-x', x);
+            target.setAttribute('data-y', y);
         },
         end() { setTimeout(() => { isDragging = false; }, 50); }
     }
