@@ -11,6 +11,8 @@ const projects = {
     ]
 };
 
+// script.js - Reemplazá la función openProject completa
+
 function openProject(category) {
     if (isDragging) return;
 
@@ -25,32 +27,26 @@ function openProject(category) {
     gallery.innerHTML = '';
     currentCategory = category;
 
+    // Medidas de la pantalla
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+
     projects[category].forEach((proj, index) => {
         const card = document.createElement('div');
         card.className = 'project-card draggable';
         
-        // --- CÁLCULO PARA EL 80% CENTRAL ---
-        
-        // 1. Definimos márgenes de seguridad (10% de cada lado = 20% total)
-        const marginX = window.innerWidth * 0.1;
-        const marginY = window.innerHeight * 0.1;
-
-        // 2. Definimos el área útil (el 80% central)
-        const usefulWidth = window.innerWidth * 0.8;
-        const usefulHeight = window.innerHeight * 0.8;
-
-        // 3. Calculamos posición aleatoria dentro de esa área útil
-        // Restamos un poco (ej: 200px) para compensar el tamaño de la propia card
-        const randomX = marginX + (Math.random() * (usefulWidth - 200));
-        const randomY = marginY + (Math.random() * (usefulHeight - 300));
-        
-        // Rotación leve
-        const randomRotate = (Math.random() - 0.5) * 15;
+        /* CÁLCULO SEGURO:
+           Queremos que X esté entre el 10% y el 70% (para que la card de 200px no se salga)
+           Queremos que Y esté entre el 10% y el 50%
+        */
+        const randomX = (w * 0.1) + (Math.random() * (w * 0.6));
+        const randomY = (h * 0.1) + (Math.random() * (h * 0.4));
+        const randomRotate = (Math.random() - 0.5) * 20;
 
         card.style.left = randomX + 'px';
         card.style.top = randomY + 'px';
-        card.setAttribute('data-rot', randomRotate);
         card.style.transform = `rotate(${randomRotate}deg)`;
+        card.setAttribute('data-rot', randomRotate);
         
         card.innerHTML = `<img src="${proj.img}" alt="${proj.title}">`;
         
