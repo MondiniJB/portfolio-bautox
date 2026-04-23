@@ -86,7 +86,7 @@ body, html {
     display: flex; align-items: center; cursor: grab; 
 }
 
-.traffic-lights { display: flex; gap: 12px; margin-right: 20px; }
+.traffic-lights { display: flex; gap: 12px; margin-right: 20px; margin-top: 10px; }
 .light { width: 16px; height: 16px; border-radius: 50%; cursor: pointer; }
 .light.close { background: #ff5f56; }
 .light.minimize { background: #ffbd2e; }
