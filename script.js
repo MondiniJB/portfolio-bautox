@@ -3,13 +3,13 @@ let currentCategory = null;
 
 const projects = {
     tipo: [
-        { id: 1, img: 'https://picsum.photos/600/800?random=1', title: 'Historia de la Tipografía' },
-        { id: 2, img: 'https://picsum.photos/600/800?random=2', title: 'Manual de Estilo' },
-        { id: 3, img: 'https://picsum.photos/600/800?random=5', title: 'Tipografía Experimental' }
+        { id: 1, img: 'https://picsum.photos/600/800?random=1', title: 'Libro de Tipografía' },
+        { id: 2, img: 'https://picsum.photos/600/800?random=2', title: 'Afiche Bauhaus' },
+        { id: 3, img: 'https://picsum.photos/600/800?random=3', title: 'Sistema de Signos' }
     ],
     branding: [
-        { id: 4, img: 'https://picsum.photos/600/800?random=3', title: 'Identidad CEVEDE' },
-        { id: 5, img: 'https://picsum.photos/600/800?random=4', title: 'Chronos Time Travel' }
+        { id: 4, img: 'https://picsum.photos/600/800?random=4', title: 'Logotipo CEVEDE' },
+        { id: 5, img: 'https://picsum.photos/600/800?random=5', title: 'Branding Chronos' }
     ]
 };
 
@@ -18,13 +18,14 @@ function openProject(category) {
 
     const gallery = document.getElementById('floating-gallery');
 
-    // Si tocamos la misma carpeta que ya está abierta, la cerramos
+    // Si ya está abierta la misma categoría, la cerramos
     if (currentCategory === category) {
-        closeGallery();
+        gallery.innerHTML = '';
+        currentCategory = null;
         return;
     }
 
-    // Si hay otra abierta, la cerramos rápido antes de abrir la nueva
+    // Si hay otra abierta, la limpiamos y marcamos la nueva
     gallery.innerHTML = '';
     currentCategory = category;
 
@@ -32,13 +33,10 @@ function openProject(category) {
         const card = document.createElement('div');
         card.className = 'project-card draggable';
         
-        // --- CÁLCULO ALEATORIO ---
-        // Definimos un área central (del 20% al 60% de la pantalla)
-        const randomX = Math.random() * (window.innerWidth - 400) + 100;
-        const randomY = Math.random() * (window.innerHeight - 400) + 100;
-        
-        // Rotación aleatoria leve para que se vea "desordenado"
-        const randomRotate = (Math.random() - 0.5) * 20; // Entre -10 y 10 grados
+        // Posiciones aleatorias dispersas
+        const randomX = Math.random() * (window.innerWidth - 300) + 50;
+        const randomY = Math.random() * (window.innerHeight - 400) + 50;
+        const randomRotate = (Math.random() - 0.5) * 20;
 
         card.style.left = randomX + 'px';
         card.style.top = randomY + 'px';
@@ -46,7 +44,7 @@ function openProject(category) {
         
         card.innerHTML = `<img src="${proj.img}" alt="${proj.title}">`;
         
-        card.onclick = (e) => {
+        card.onclick = () => {
             if (!isDragging) openFullscreen(proj);
         };
         
@@ -54,20 +52,13 @@ function openProject(category) {
     });
 }
 
-function closeGallery() {
-    const gallery = document.getElementById('floating-gallery');
-    // Añadimos una clase de salida para la animación si querés, o simplemente limpiamos
-    gallery.innerHTML = '';
-    currentCategory = null;
-}
-
 function openFullscreen(proj) {
     const fs = document.getElementById('project-fullscreen');
     const content = document.getElementById('project-content');
     fs.style.display = 'block';
     content.innerHTML = `
-        <h1 style="font-size: 2.5rem; margin-bottom: 10px;">${proj.title}</h1>
-        <img src="${proj.img}" alt="${proj.title}">
+        <h1>${proj.title}</h1>
+        <img src="${proj.img}">
     `;
 }
 
@@ -75,7 +66,7 @@ function closeFullscreen() {
     document.getElementById('project-fullscreen').style.display = 'none';
 }
 
-// Configuración de movimiento
+// Drag and Drop
 interact('.draggable').draggable({
     listeners: {
         start() { isDragging = true; },
@@ -84,17 +75,17 @@ interact('.draggable').draggable({
             const x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
             const y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
             
-            // Mantener la rotación aleatoria mientras se arrastra
-            const currentTransform = target.style.transform;
-            const rotateMatch = currentTransform.match(/rotate\((.*?)\)/);
-            const rotation = rotateMatch ? rotateMatch[0] : 'rotate(0deg)';
+            // Mantenemos la rotación original mientras arrastramos
+            const style = window.getComputedStyle(target);
+            const matrix = new WebKitCSSMatrix(style.transform);
+            const rotate = Math.round(Math.atan2(matrix.b, matrix.a) * (180/Math.PI));
 
-            target.style.transform = `translate(${x}px, ${y}px) ${rotation}`;
+            target.style.transform = `translate(${x}px, ${y}px) rotate(${rotate}deg)`;
             target.setAttribute('data-x', x);
             target.setAttribute('data-y', y);
         },
         end() {
-            setTimeout(() => { isDragging = false; }, 150);
+            setTimeout(() => { isDragging = false; }, 100);
         }
     }
 });
