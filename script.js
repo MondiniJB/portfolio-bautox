@@ -22,10 +22,17 @@ function openProject(category) {
         const card = document.createElement('div');
         card.className = 'project-card draggable';
         
-        // Se despliegan en abanico
-        const offset = index * 40;
-        card.style.left = (150 + offset) + 'px';
-        card.style.top = (150 + offset) + 'px';
+        // Calculamos el centro de la pantalla
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+        
+        // Las centramos y les damos un pequeño desfase (offset) para que no se tapen totalmente
+        const offset = index * 30; 
+        
+        // Ajustamos la posición inicial restando la mitad del tamaño de la card
+        // Usamos 300px y 225px como aproximación del centro de la card
+        card.style.left = (centerX - 200 + offset) + 'px';
+        card.style.top = (centerY - 150 + offset) + 'px';
         
         card.innerHTML = `<img src="${proj.img}" alt="${proj.title}">`;
         
