@@ -7,20 +7,20 @@ body, html {
 
 #desktop { width: 100vw; height: 100vh; position: relative; }
 
-/* CARPETAS - SIEMPRE ARRIBA */
+/* CARPETAS */
 .folder {
     width: 100px; height: 100px;
     text-align: center; cursor: pointer;
     position: absolute; display: flex;
     flex-direction: column; align-items: center;
-    z-index: 1000; /* Asegura que la carpeta esté por encima de las fotos */
+    z-index: 1000; /* Siempre arriba de las fotos */
 }
 
 .icon {
     width: 70px; height: 50px;
     background: linear-gradient(180deg, #ffcc00, #ff9900);
     border-radius: 8px; position: relative;
-    box-shadow: inset 0 2px 5px rgba(255,255,255,0.8), 0 5px 15px rgba(0,0,0,0.2);
+    box-shadow: inset 0 2px 5px rgba(255,255,255,0.8), 0 4px 10px rgba(0,0,0,0.2);
 }
 
 .icon::before {
@@ -30,28 +30,29 @@ body, html {
 
 .label { margin-top: 8px; color: white; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 
-/* CARDS ESTILO VIDRIO */
+/* FOTOS FRUTIGER AERO */
 .project-card {
-    height: 55vh; width: auto;
+    height: 60vh; width: auto;
     aspect-ratio: 4/5;
     position: absolute;
     cursor: pointer;
-    background: rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(15px);
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(12px);
     border: 2px solid rgba(255, 255, 255, 0.5);
-    border-radius: 25px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-    z-index: 500; /* Por debajo de las carpetas */
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    z-index: 500;
     overflow: hidden;
-    animation: popIn 0.4s ease-out;
+    /* Animación más rápida */
+    animation: quickPop 0.3s ease-out forwards;
 }
 
-@keyframes popIn {
-    0% { transform: scale(0.5); opacity: 0; }
+@keyframes quickPop {
+    0% { transform: scale(0.8); opacity: 0; }
     100% { transform: scale(1); opacity: 1; }
 }
 
-.project-card img { width: 100%; height: 100%; object-fit: cover; }
+.project-card img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
 
 /* FULLSCREEN */
 #project-fullscreen {
