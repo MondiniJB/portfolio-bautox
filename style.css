@@ -1,50 +1,83 @@
-body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background: radial-gradient(circle at center, #00b4db, #0083b0); font-family: 'Segoe UI', sans-serif; }
+/* style.css - REEMPLAZÁ TODO EL CONTENIDO POR ESTO */
+
+body, html { 
+    margin: 0; padding: 0; height: 100%; overflow: hidden; 
+    background: radial-gradient(circle at center, #00b4db, #0083b0); 
+    font-family: 'Segoe UI', sans-serif; 
+}
+
 #desktop { width: 100vw; height: 100vh; position: relative; z-index: 1; }
 
-/* CARPETAS */
-.folder, .app-icon { width: 100px; height: 120px; text-align: center; cursor: pointer; position: absolute; display: flex; flex-direction: column; align-items: center; z-index: 100; }
-.icon-img { width: 85px; height: 85px; background-size: contain; background-repeat: no-repeat; background-position: center; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3)); }
+/* --- CAPA 100: ICONOS (Siempre abajo) --- */
+.folder, .app-icon { 
+    width: 100px; height: 120px; text-align: center; cursor: pointer; 
+    position: absolute; display: flex; flex-direction: column; 
+    align-items: center; 
+    z-index: 100 !important; /* LIGA BAJA */
+}
 
-/* --- PERSONALIZACIÓN DE ICONOS --- */
-/* Cambiá 'nombre-de-tu-archivo.png' por el que subas a GitHub */
+.icon-img { 
+    width: 85px; height: 85px; background-size: contain; 
+    background-repeat: no-repeat; background-position: center; 
+}
+
+/* Acá es donde personalizás tus carpetas subidas a GitHub */
 .folder-pink .icon-img { background-image: url('peluche.png'); background-color: rgba(255,182,193,0.3); border-radius: 15px; }
 .folder-raw .icon-img { background-image: url('raw.png'); background-color: rgba(136,136,136,0.3); border-radius: 15px; }
 .folder-cloud .icon-img { background-image: url('nube.png'); background-color: rgba(255,255,255,0.3); border-radius: 15px; }
 .folder-chrome .icon-img { background-image: url('chrome.png'); background-color: rgba(221,221,221,0.3); border-radius: 15px; }
 
-.app-visual { width: 70px; height: 70px; background: white; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 35px; border: 2px solid white; }
-.label { margin-top: 8px; color: white; font-weight: bold; text-shadow: 0 2px 5px rgba(0,0,0,0.8); background: rgba(0,0,0,0.2); padding: 2px 10px; border-radius: 10px; }
+.app-visual { 
+    width: 70px; height: 70px; background: white; border-radius: 20px; 
+    display: flex; align-items: center; justify-content: center; 
+    font-size: 35px; border: 2px solid white; 
+}
 
-/* CAPA FOTOS - AUTO FRAME */
+.label { 
+    margin-top: 8px; color: white; font-weight: bold; 
+    text-shadow: 0 2px 5px rgba(0,0,0,0.8); background: rgba(0,0,0,0.2); 
+    padding: 2px 10px; border-radius: 10px; 
+}
+
+/* --- CAPA 9000: VENTANAS Y FOTOS (Siempre arriba) --- */
+.project-card, .aero-window { 
+    z-index: 9000 !important; /* LIGA ALTA */
+}
+
 .project-card { 
-    height: 55vh; width: 40vh; /* Tamaño fijo de ventana para el marco */
-    position: absolute; cursor: pointer; 
+    height: 55vh; width: 40vh; position: absolute; cursor: pointer; 
     background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(12px); 
     border: 3px solid white; border-radius: 25px; 
-    z-index: 9000 !important;
     box-shadow: 0 30px 70px rgba(0,0,0,0.5);
-    overflow: hidden; /* Corta la imagen sobrante */
+    overflow: hidden; /* Corta la imagen para el redondeado */
     animation: quickPop 0.2s ease-out;
 }
 
 .project-card img { 
-    width: 100%; 
-    height: 100%; 
-    object-fit: cover; /* Mantiene relación aspecto (recorta si es necesario) */
+    width: 100%; height: 100%; object-fit: cover; /* Autoframe */
     pointer-events: none; 
 }
 
-/* VENTANA BIOGRAFÍA */
 .aero-window { 
     width: 90vw; height: 80vh; max-width: 1100px; 
-    position: fixed; top: 50%; left: 50%; margin-left: -45vw; margin-top: -40vh;
-    z-index: 9500 !important; 
-    background: rgba(255,255,255,0.3); backdrop-filter: blur(25px); border-radius: 35px; border: 2px solid white; display: flex; flex-direction: column; overflow: hidden;
+    position: fixed; top: 50%; left: 50%; 
+    margin-left: -45vw; margin-top: -40vh;
+    background: rgba(255,255,255,0.3); backdrop-filter: blur(25px); 
+    border-radius: 35px; border: 2px solid white; 
+    display: flex; flex-direction: column; overflow: hidden;
 }
 
-@media (min-width: 1222px) { .aero-window { margin-left: -550px; margin-top: -375px; } }
+/* Ajuste para pantallas grandes */
+@media (min-width: 1222px) { 
+    .aero-window { margin-left: -550px; margin-top: -375px; } 
+}
 
-.window-header { padding: 20px; background: rgba(255,255,255,0.1); border-bottom: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; cursor: grab; }
+.window-header { 
+    padding: 20px; background: rgba(255,255,255,0.1); 
+    border-bottom: 1px solid rgba(255,255,255,0.2); 
+    display: flex; align-items: center; cursor: grab; 
+}
+
 .traffic-lights { display: flex; gap: 12px; margin-right: 20px; }
 .light { width: 16px; height: 16px; border-radius: 50%; cursor: pointer; }
 .light.close { background: #ff5f56; }
@@ -53,7 +86,19 @@ body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background: 
 
 .window-content { flex: 1; overflow-y: auto; padding: 40px; color: white; }
 .bio-layout { display: flex; gap: 40px; align-items: center; }
-.bio-photo { width: 300px; height: 300px; border-radius: 30px; border: 5px solid white; object-fit: cover; }
+.bio-photo { 
+    width: 300px; height: 300px; border-radius: 30px; 
+    border: 5px solid white; object-fit: cover; 
+}
 
-#project-fullscreen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9); z-index: 10000; display: flex; align-items: center; justify-content: center; }
+.window-title { color: white; font-size: 15px; font-weight: bold; margin-left: 10px; }
+
+/* Fullscreen */
+#project-fullscreen { 
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+    background: rgba(0,0,0,0.9); z-index: 10000; 
+    display: flex; align-items: center; justify-content: center; 
+}
 #project-content img { height: 85vh; border-radius: 20px; border: 4px solid white; }
+
+@keyframes quickPop { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
