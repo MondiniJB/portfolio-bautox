@@ -99,7 +99,7 @@ body, html {
     border: 5px solid white; object-fit: cover; 
 }
 
-.window-title { color: white; font-size: 15px; font-weight: bold; margin-left: 20px; margin-top: 10px; }
+.window-title { color: white; font-size: 15px; font-weight: bold; margin-left: 20px; margin-top: 30px; }
 
 /* Fullscreen */
 #project-fullscreen { 
