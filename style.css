@@ -1,143 +1,96 @@
 body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    overflow: hidden;
-    background-color: #000;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Tipografía más Windows */
+    margin: 0; padding: 0;
+    height: 100%; overflow: hidden;
+    /* Fondo con degradado Frutiger Aero clásico */
+    background: radial-gradient(circle at center, #00b4db, #0083b0);
+    font-family: 'Segoe UI', sans-serif;
 }
 
-#desktop {
-    width: 100vw;
-    height: 100vh;
-    position: relative;
-    padding: 30px;
-}
+#desktop { width: 100vw; height: 100vh; position: relative; }
 
-/* CARPETAS */
+/* ESTILO CARPETA FRUTIGER */
 .folder {
-    width: 110px;
-    height: 100px;
-    text-align: center;
-    cursor: pointer;
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    user-select: none;
-    z-index: 5;
-    /* Ubicación inicial */
-    top: 50px;
-    left: 50px;
+    width: 100px; height: 110px;
+    text-align: center; cursor: pointer;
+    position: absolute; display: flex;
+    flex-direction: column; align-items: center;
+    transition: transform 0.2s ease;
+    z-index: 100;
 }
 
-.folder#folder2 { left: 180px; }
+/* Posiciones iniciales dispersas */
+#f-tipo { top: 15%; left: 15%; }
+#f-branding { top: 15%; left: 40%; }
+#f-editorial { top: 15%; left: 65%; }
+#f-packaging { top: 50%; left: 25%; }
+#f-social { top: 50%; left: 55%; }
 
-.icon {
-    width: 70px;
-    height: 50px;
-    background: linear-gradient(135deg, #ff00cc 0%, #3333ff 100%);
+.icon-container { width: 80px; height: 65px; position: relative; }
+
+/* Carpeta Cerrada */
+.folder-closed {
+    width: 100%; height: 100%;
+    background: linear-gradient(180deg, #ffd700, #ff8c00);
     border-radius: 8px;
+    box-shadow: inset 0 2px 5px rgba(255,255,255,0.8), 0 5px 15px rgba(0,0,0,0.2);
     position: relative;
-    box-shadow: 0 4px 15px rgba(255, 0, 204, 0.3);
+    transition: opacity 0.3s ease;
 }
 
-.icon::before {
-    content: '';
-    position: absolute;
-    top: -8px; left: 8px;
-    width: 25px; height: 8px;
-    background: inherit;
-    border-radius: 4px 4px 0 0;
+.folder-closed::before {
+    content: ''; position: absolute; top: -8px; left: 5px;
+    width: 30px; height: 10px; background: inherit; border-radius: 5px 5px 0 0;
 }
 
-.label {
-    margin-top: 8px;
-    font-size: 13px;
-    color: white;
-    font-weight: 500;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+/* Carpeta Abierta (se muestra con clase .open) */
+.icon-open {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(180deg, #ffcc00, #e67e22);
+    border-radius: 8px;
+    clip-path: polygon(0 20%, 100% 0, 100% 100%, 0 100%); /* Efecto boca abierta */
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
-/* CARDS ESTILO WINDOWS AERO */
+.folder.is-open .folder-closed { opacity: 0.5; }
+.folder.is-open .icon-open { opacity: 1; }
+
+.label { 
+    margin-top: 10px; color: white; font-weight: bold;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* CARDS AERO (Glassmorphism saturado) */
 .project-card {
-    width: auto;
-    height: 60vh; /* Grandes pero no fullscreen */
-    aspect-ratio: 4 / 3; /* Proporción de tus diseños */
+    height: 50vh; width: auto;
+    aspect-ratio: 4/5;
     position: absolute;
     cursor: pointer;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: 25px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 50;
     overflow: hidden;
-    user-select: none;
-    
-    /* El efecto Aero: Vidrio Esmerilado (Glassmorphism) */
-    background: rgba(255, 255, 255, 0.1); /* Fondo translúcido */
-    backdrop-filter: blur(15px) saturate(180%); /* Despulido */
-    -webkit-backdrop-filter: blur(15px) saturate(180%);
-    
-    /* Bordes Redondeados y Borde Sutil */
-    border-radius: 20px; /* Redondeado tipo Apple/Aero moderno */
-    border: 1px solid rgba(255, 255, 255, 0.2); /* Borde de vidrio */
-    
-    /* Sombra Suave y Profunda */
-    box-shadow: 0 15px 40px rgba(0,0,0,0.6);
-    
-    /* Animación de entrada suave (Vuelo) */
-    animation: aeroFlyIn 0.6s cubic-bezier(0.23, 1, 0.32, 1) both;
 }
 
-@keyframes aeroFlyIn {
-    0% { 
-        transform: scale(0.5) translate(0, 50px); 
-        opacity: 0; 
-    }
-    100% { 
-        opacity: 1; 
-    }
-}
+.project-card img { width: 100%; height: 100%; object-fit: cover; }
 
-.project-card img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain; /* Para que la imagen no se corte */
-    padding: 10px; /* Margen interno para la imagen */
-}
-
-/* Efecto al pasar el mouse */
-.project-card:hover {
-    z-index: 100 !important;
-    transform: scale(1.03);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-    background: rgba(255, 255, 255, 0.15); /* Un poco más claro */
-}
+/* Animación de entrada/salida desde la carpeta */
+.card-entering { transform: scale(0) translate(0, 0) !important; opacity: 0; }
 
 /* FULLSCREEN */
 #project-fullscreen {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    background: rgba(0,0,0,0.95);
-    z-index: 1000;
-    color: white;
-    padding: 60px 20px;
-    text-align: center;
-}
-
-#project-content img {
-    height: 80vh;
-    max-width: 90%;
-    object-fit: contain;
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0,180,219, 0.95); z-index: 2000;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
 }
 
 .close-fs {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    padding: 12px 30px;
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    border: 1px solid rgba(255,255,255,0.3);
-    border-radius: 40px;
-    cursor: pointer;
-    backdrop-filter: blur(5px);
+    position: absolute; top: 20px; right: 20px;
+    width: 50px; height: 50px; border-radius: 50%;
+    background: white; border: none; font-size: 20px; cursor: pointer;
 }
