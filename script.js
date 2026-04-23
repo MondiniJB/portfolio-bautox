@@ -1,70 +1,86 @@
 let isDragging = false;
-let currentCategory = null;
+let openFolderId = null;
 
-// Tus proyectos (Placeholder por ahora)
 const projects = {
-    tipo: [
-        { id: 1, img: 'https://via.placeholder.com/600x800', title: 'Libro de Tipografía' },
-        { id: 2, img: 'https://via.placeholder.com/600x800', title: 'Manual de Estilo' }
-    ],
-    branding: [
-        { id: 3, img: 'https://via.placeholder.com/600x800', title: 'Identidad CEVEDE' },
-        { id: 4, img: 'https://via.placeholder.com/600x800', title: 'Branding Chronos' }
-    ]
+    tipo: [{id: 1, img: 'https://picsum.photos/400/500?random=1'}],
+    branding: [{id: 2, img: 'https://picsum.photos/400/500?random=2'}],
+    editorial: [{id: 3, img: 'https://picsum.photos/400/500?random=3'}],
+    packaging: [{id: 4, img: 'https://picsum.photos/400/500?random=4'}],
+    social: [{id: 5, img: 'https://picsum.photos/400/500?random=5'}]
 };
 
-function openProject(category, event) {
+function toggleProject(category, element) {
     if (isDragging) return;
 
     const gallery = document.getElementById('floating-gallery');
-
-    // Cerrar si ya está abierta la misma carpeta
-    if (currentCategory === category) {
-        gallery.innerHTML = '';
-        currentCategory = null;
+    
+    // Si la carpeta ya está abierta, cerramos todo
+    if (openFolderId === category) {
+        closeAllCards(element);
         return;
     }
 
-    gallery.innerHTML = '';
-    currentCategory = category;
+    // Si hay otra abierta, la cerramos antes
+    if (openFolderId) {
+        const prevFolder = document.querySelector('.folder.is-open');
+        closeAllCards(prevFolder);
+    }
 
-    // Medidas de la pantalla
-    const w = window.innerWidth;
-    const h = window.innerHeight;
+    openFolderId = category;
+    element.classList.add('is-open');
 
-    // Posición de la carpeta clicada (para el efecto de vuelo inicial)
-    const folder = event.currentTarget;
-    const folderRect = folder.getBoundingClientRect();
+    // Posición de la carpeta para que las fotos salgan de ahí
+    const rect = element.getBoundingClientRect();
 
     projects[category].forEach((proj, index) => {
         const card = document.createElement('div');
-        card.className = 'project-card draggable';
+        card.className = 'project-card draggable card-entering';
         
-        // --- CÁLCULO DE POSICIÓN CENTRADA (DERECHAS) ---
-        // Desfase para que no se encimen totalmente (como abanico)
-        const offset = index * 40; 
-        
-        // Posición final centrada en la pantalla
-        const centerX = (w / 2) - 300 + offset; // Asumimos un ancho aprox de card de 600px
-        const centerY = (h / 2) - 400 + offset; // Asumimos un alto aprox de 800px
+        // Posición inicial (exactamente donde está la carpeta)
+        card.style.left = rect.left + 'px';
+        card.style.top = rect.top + 'px';
 
-        // Posicionamos en el centro de la pantalla, sin rotación
-        card.style.left = centerX + 'px';
-        card.style.top = centerY + 'px';
-        
-        card.innerHTML = `<img src="${proj.img}" alt="${proj.title}">`;
-        
+        card.innerHTML = `<img src="${proj.img}">`;
         card.onclick = () => { if (!isDragging) openFullscreen(proj); };
         
         gallery.appendChild(card);
+
+        // Dispersión aleatoria (Margen 15%) después de un mini delay
+        setTimeout(() => {
+            const margin = 0.15;
+            const randomX = (window.innerWidth * margin) + (Math.random() * (window.innerWidth * (1 - margin * 2) - 200));
+            const randomY = (window.innerHeight * margin) + (Math.random() * (window.innerHeight * (1 - margin * 2) - 300));
+            
+            card.classList.remove('card-entering');
+            card.style.left = randomX + 'px';
+            card.style.top = randomY + 'px';
+        }, 50);
     });
+}
+
+function closeAllCards(folderElement) {
+    const cards = document.querySelectorAll('.project-card');
+    const rect = folderElement.getBoundingClientRect();
+
+    cards.forEach(card => {
+        // Vuelven a la carpeta
+        card.style.left = rect.left + 'px';
+        card.style.top = rect.top + 'px';
+        card.style.transform = 'scale(0)';
+        card.style.opacity = '0';
+    });
+
+    setTimeout(() => {
+        document.getElementById('floating-gallery').innerHTML = '';
+        folderElement.classList.remove('is-open');
+        openFolderId = null;
+    }, 600); // Mismo tiempo que la transición de CSS
 }
 
 function openFullscreen(proj) {
     const fs = document.getElementById('project-fullscreen');
-    const content = document.getElementById('project-content');
-    fs.style.display = 'block';
-    content.innerHTML = `<h1>${proj.title}</h1><img src="${proj.img}">`;
+    fs.style.display = 'flex';
+    document.getElementById('project-content').innerHTML = `<img src="${proj.img}" style="height:80vh; border-radius:20px;">`;
 }
 
 function closeFullscreen() {
@@ -79,8 +95,6 @@ interact('.draggable').draggable({
             const target = event.target;
             const x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
             const y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-            
-            // SIN ROTACIÓN AL MOVER
             target.style.transform = `translate(${x}px, ${y}px)`;
             target.setAttribute('data-x', x);
             target.setAttribute('data-y', y);
