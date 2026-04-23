@@ -3,36 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio OS - Frutiger Aero</title>
+    <title>Portfolio OS</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <div id="desktop" onclick="closeFromOutside(event)">
         
-        <div class="folder draggable folder-pink" onclick="toggleProject('tipo', this)">
+        <div class="folder draggable" onclick="toggleProject('tipo', this)">
             <div class="icon-img"></div>
             <span class="label">Tipografía</span>
         </div>
 
-        <div class="folder draggable folder-raw" onclick="toggleProject('branding', this)">
+        <div class="folder draggable" onclick="toggleProject('branding', this)">
             <div class="icon-img"></div>
             <span class="label">Branding</span>
         </div>
 
-        <div class="folder draggable folder-cloud" onclick="toggleProject('editorial', this)">
+        <div class="folder draggable" onclick="toggleProject('editorial', this)">
             <div class="icon-img"></div>
             <span class="label">Editorial</span>
         </div>
 
-        <div class="folder draggable folder-chrome" onclick="toggleProject('packaging', this)">
+        <div class="folder draggable" onclick="toggleProject('packaging', this)">
             <div class="icon-img"></div>
             <span class="label">Packaging</span>
-        </div>
-
-        <div class="folder draggable folder-green" onclick="toggleProject('social', this)">
-            <div class="icon-img"></div>
-            <span class="label">Social Media</span>
         </div>
 
         <div class="app-icon draggable" onclick="openAbout(event)">
@@ -56,18 +50,16 @@
                     <img src="https://picsum.photos/400/400" class="bio-photo">
                     <div class="bio-text">
                         <h2>¡Hola! Soy Tu Nombre</h2>
-                        <p>Diseñador gráfico y apasionado por las interfaces táctiles. Este es mi espacio de experimentación visual.</p>
+                        <p>Diseñador gráfico. Este es mi escritorio interactivo.</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
     <div id="project-fullscreen" style="display:none;" onclick="closeFullscreen()">
         <button class="close-fs">✕</button>
         <div id="project-content"></div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
     <script src="script.js"></script>
 </body>
