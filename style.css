@@ -26,7 +26,7 @@ body, html {
 .folder-raw .icon-img { background-image: url('carpeta_raw.png'); background-color: rgba(136,136,136,0); border-radius: 15px; }
 .folder-cloud .icon-img { background-image: url('carpeta_glass.png'); background-color: rgba(255,255,255,0); border-radius: 15px; }
 .folder-chrome .icon-img { background-image: url('carpeta_cd.png'); background-color: rgba(255,255,255,0); border-radius: 15px; }
-.icon-img .icon-img { background-image: url('user_icon.png'); background-color: rgba(255,255,255,0); border-radius: 15px; }
+.app-icon .icon-img { background-image: url('user_icon.png'); background-color: rgba(255,255,255,0); border-radius: 15px; }
 
 
 .app-visual { 
