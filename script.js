@@ -18,14 +18,12 @@ function openProject(category) {
 
     const gallery = document.getElementById('floating-gallery');
 
-    // Si ya está abierta la misma categoría, la cerramos
     if (currentCategory === category) {
         gallery.innerHTML = '';
         currentCategory = null;
         return;
     }
 
-    // Si hay otra abierta, la limpiamos y marcamos la nueva
     gallery.innerHTML = '';
     currentCategory = category;
 
@@ -33,13 +31,15 @@ function openProject(category) {
         const card = document.createElement('div');
         card.className = 'project-card draggable';
         
-        // Posiciones aleatorias dispersas
+        // Dispersión aleatoria
         const randomX = Math.random() * (window.innerWidth - 300) + 50;
         const randomY = Math.random() * (window.innerHeight - 400) + 50;
-        const randomRotate = (Math.random() - 0.5) * 20;
+        const randomRotate = (Math.random() - 0.5) * 30; // Más rotación
 
         card.style.left = randomX + 'px';
         card.style.top = randomY + 'px';
+        // Guardamos la rotación en un atributo para no perderla al arrastrar
+        card.setAttribute('data-rot', randomRotate);
         card.style.transform = `rotate(${randomRotate}deg)`;
         
         card.innerHTML = `<img src="${proj.img}" alt="${proj.title}">`;
@@ -56,17 +56,13 @@ function openFullscreen(proj) {
     const fs = document.getElementById('project-fullscreen');
     const content = document.getElementById('project-content');
     fs.style.display = 'block';
-    content.innerHTML = `
-        <h1>${proj.title}</h1>
-        <img src="${proj.img}">
-    `;
+    content.innerHTML = `<h1>${proj.title}</h1><img src="${proj.img}">`;
 }
 
 function closeFullscreen() {
     document.getElementById('project-fullscreen').style.display = 'none';
 }
 
-// Drag and Drop
 interact('.draggable').draggable({
     listeners: {
         start() { isDragging = true; },
@@ -74,13 +70,9 @@ interact('.draggable').draggable({
             const target = event.target;
             const x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
             const y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-            
-            // Mantenemos la rotación original mientras arrastramos
-            const style = window.getComputedStyle(target);
-            const matrix = new WebKitCSSMatrix(style.transform);
-            const rotate = Math.round(Math.atan2(matrix.b, matrix.a) * (180/Math.PI));
+            const r = target.getAttribute('data-rot') || 0;
 
-            target.style.transform = `translate(${x}px, ${y}px) rotate(${rotate}deg)`;
+            target.style.transform = `translate(${x}px, ${y}px) rotate(${r}deg)`;
             target.setAttribute('data-x', x);
             target.setAttribute('data-y', y);
         },
