@@ -73,14 +73,36 @@ function closeFullscreen() { document.getElementById('project-fullscreen').style
 
 interact('.draggable').draggable({
     listeners: {
-        start(event) { isDragging = true; highestZ++; event.target.style.zIndex = highestZ + 500; },
+        start(event) {
+            isDragging = true;
+            
+            // Si lo que muevo es una FOTO o la VENTANA de bio
+            if (event.target.classList.contains('project-card') || event.target.classList.contains('aero-window')) {
+                highestZ++;
+                event.target.style.zIndex = highestZ + 9000; // Se mantiene en la liga de los 9000
+            } else {
+                // Si lo que muevo es un ICONO o CARPETA
+                // No usamos highestZ para que no compita con las ventanas
+                event.target.style.zIndex = 500; // Se queda en la liga baja siempre
+            }
+        },
         move(event) {
             const target = event.target;
             const x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
             const y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-            target.style.transform = `translate(${x}px, ${y}px)`;
-            target.setAttribute('data-x', x); target.setAttribute('data-y', y);
+            
+            // Fix para que la ventana gigante no salte al moverla
+            if (target.classList.contains('aero-window')) {
+                target.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+            } else {
+                target.style.transform = `translate(${x}px, ${y}px)`;
+            }
+            
+            target.setAttribute('data-x', x);
+            target.setAttribute('data-y', y);
         },
-        end() { setTimeout(() => { isDragging = false; }, 50); }
+        end() {
+            setTimeout(() => { isDragging = false; }, 50);
+        }
     }
 });
