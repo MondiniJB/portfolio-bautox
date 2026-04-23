@@ -11,7 +11,6 @@ body, html {
     width: 100vw;
     height: 100vh;
     position: relative;
-    padding: 30px;
 }
 
 /* CARPETAS */
@@ -25,7 +24,7 @@ body, html {
     flex-direction: column;
     align-items: center;
     user-select: none;
-    z-index: 5;
+    z-index: 10; /* Por encima de las fotos al inicio */
 }
 
 .icon {
@@ -53,7 +52,7 @@ body, html {
     text-shadow: 0 1px 3px #000;
 }
 
-/* FOTOS FLOTANTES DISPERSAS */
+/* FOTOS CON EFECTO EXPLOSIÓN */
 .project-card {
     width: auto;
     height: 55vh;
@@ -64,12 +63,19 @@ body, html {
     position: absolute;
     cursor: pointer;
     box-shadow: 0 15px 45px rgba(0,0,0,0.8);
-    animation: scatterIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+    /* La animación de explosión */
+    animation: explode 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
 }
 
-@keyframes scatterIn {
-    0% { transform: scale(0); opacity: 0; }
-    100% { opacity: 1; }
+@keyframes explode {
+    0% { 
+        transform: scale(0) rotate(0deg); 
+        opacity: 0;
+    }
+    100% { 
+        /* El transform final (rotate) lo mantiene el JS */
+        opacity: 1;
+    }
 }
 
 .project-card img {
@@ -79,7 +85,7 @@ body, html {
 }
 
 .project-card:hover {
-    z-index: 100 !important;
+    z-index: 1000 !important;
     border-color: #ff00cc;
 }
 
@@ -89,7 +95,7 @@ body, html {
     top: 0; left: 0;
     width: 100vw; height: 100vh;
     background: rgba(0,0,0,0.95);
-    z-index: 1000;
+    z-index: 2000;
     overflow-y: auto;
     color: white;
     padding: 60px 20px;
