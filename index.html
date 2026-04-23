@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio OS</title>
+    <title>Portfolio OS - Aero Edition</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div id="desktop">
-        <div class="folder draggable" onclick="openProject('tipo')">
+        <div class="folder draggable" id="folder1" onclick="openProject('tipo', event)">
             <div class="icon"></div>
             <span class="label">Tipografía_Book</span>
         </div>
 
-        <div class="folder draggable" onclick="openProject('branding')" style="left: 180px;">
+        <div class="folder draggable" id="folder2" onclick="openProject('branding', event)">
             <div class="icon"></div>
             <span class="label">Proyecto_Branding</span>
         </div>
