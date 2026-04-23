@@ -50,7 +50,7 @@ body, html {
     border: 0px solid white; border-radius: 25px; 
     box-shadow: 0 30px 70px rgba(0,0,0,0.5);
     overflow: hidden; /* Corta la imagen para el redondeado */
-    animation: quickPop 0.1s ease-in;
+    animation: quickPop 0.2s ease-in-out;
 }
 
 .project-card img { 
