@@ -8,12 +8,29 @@ body, html {
 #desktop { width: 100vw; height: 100vh; position: relative; }
 
 /* LOOK MAC */
+/* style.css - Buscá y reemplazá el bloque .folder */
+
 .folder {
-    width: 110px; height: 100px;
-    text-align: center; cursor: pointer;
-    position: absolute; display: flex;
-    flex-direction: column; align-items: center;
+    width: 110px;
+    height: 100px;
+    text-align: center;
+    cursor: pointer;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    user-select: none;
     z-index: 10;
+    
+    /* Esto las ubica en el centro inicialmente */
+    top: 40%; 
+    left: 45%;
+}
+
+/* Separamos la segunda carpeta para que no nazca exactamente encima de la otra */
+.folder:nth-child(2) {
+    left: 55%;
+}
 }
 
 .icon {
