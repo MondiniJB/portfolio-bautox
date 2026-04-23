@@ -8,7 +8,8 @@
 </head>
 <body>
 
-    <div id="desktop">
+    <div id="desktop" onclick="closeFromOutside(event)">
+        
         <div class="folder draggable" id="f-tipo" onclick="toggleProject('tipo', this)">
             <div class="icon"></div>
             <span class="label">Tipografía</span>
@@ -30,7 +31,36 @@
             <span class="label">Social Media</span>
         </div>
 
+        <div class="app-icon draggable" onclick="openAbout(event)">
+            <div class="app-visual">👤</div>
+            <span class="label">Sobre Mí</span>
+        </div>
+
         <div id="floating-gallery"></div>
+
+        <div id="about-window" class="aero-window" style="display:none;" onclick="event.stopPropagation()">
+            <div class="window-header">
+                <div class="traffic-lights">
+                    <span class="light close" onclick="closeAbout()"></span>
+                    <span class="light minimize"></span>
+                    <span class="light maximize"></span>
+                </div>
+                <span class="window-title">Biografía.exe</span>
+            </div>
+            <div class="window-content">
+                <div class="bio-layout">
+                    <img src="https://picsum.photos/200/200" alt="Mi Foto" class="bio-photo">
+                    <div class="bio-text">
+                        <h2>¡Hola! Soy [Tu Nombre]</h2>
+                        <p>Soy diseñador gráfico profesional y estudiante universitario. Me especializo en semiótica visual y diseño funcional...</p>
+                        <p>Me apasiona la tecnología, desde el hardware de PC hasta las interfaces retro-futuristas como esta que estás viendo.</p>
+                        <p>Aquí puedes ver más sobre mis proyectos de branding como CHRONOS o CEVEDE.</p>
+                        <p>Sigue scrolleando... Tengo experiencia en tipografía, maquetación de libros y campañas publicitarias.</p>
+                        <p>Contacto: info@tuportfolio.com</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div id="project-fullscreen" style="display:none;" onclick="closeFullscreen()">
