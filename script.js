@@ -18,11 +18,36 @@ const content = {
 };
 
 window.onload = () => {
-    document.querySelectorAll('.folder, .app-icon').forEach(f => {
-        const x = Math.random() * (window.innerWidth - 150) + 50;
-        const y = Math.random() * (window.innerHeight - 150) + 50;
-        f.style.left = x + 'px'; f.style.top = y + 'px';
-        f.setAttribute('data-x', 0); f.setAttribute('data-y', 0);
+    const items = document.querySelectorAll('.folder, .app-icon');
+    const positions = [];
+    const margin = 0.10; // 10% de margen de pantalla
+    const minDistance = 150; // Distancia mínima entre carpetas
+
+    items.forEach(item => {
+        let x, y, collision;
+        let attempts = 0;
+
+        do {
+            collision = false;
+            x = (window.innerWidth * margin) + Math.random() * (window.innerWidth * (1 - margin * 2) - 100);
+            y = (window.innerHeight * margin) + Math.random() * (window.innerHeight * (1 - margin * 2) - 120);
+
+            // Verificar si choca con una posición anterior
+            for (let pos of positions) {
+                const dist = Math.hypot(x - pos.x, y - pos.y);
+                if (dist < minDistance) {
+                    collision = true;
+                    break;
+                }
+            }
+            attempts++;
+        } while (collision && attempts < 100);
+
+        positions.push({ x, y });
+        item.style.left = x + 'px';
+        item.style.top = y + 'px';
+        item.setAttribute('data-x', 0);
+        item.setAttribute('data-y', 0);
     });
 };
 
@@ -51,7 +76,14 @@ function openAbout(event) {
     if (isDragging) return;
     const win = document.getElementById('about-window');
     win.style.display = 'flex';
-    highestZ++; win.style.zIndex = highestZ + 100;
+    
+    // Resetear posición de arrastre para que interact.js no se confunda
+    win.setAttribute('data-x', 0);
+    win.setAttribute('data-y', 0);
+    win.style.transform = 'translate(0px, 0px)';
+    
+    highestZ++;
+    win.style.zIndex = highestZ + 9000;
 }
 
 function closeAbout() { document.getElementById('about-window').style.display = 'none'; }
@@ -75,29 +107,22 @@ interact('.draggable').draggable({
     listeners: {
         start(event) {
             isDragging = true;
+            const target = event.target;
             
-            // Si lo que muevo es una FOTO o la VENTANA de bio
-            if (event.target.classList.contains('project-card') || event.target.classList.contains('aero-window')) {
+            if (target.classList.contains('project-card') || target.classList.contains('aero-window')) {
                 highestZ++;
-                event.target.style.zIndex = highestZ + 9000; // Se mantiene en la liga de los 9000
+                target.style.zIndex = highestZ + 9000;
             } else {
-                // Si lo que muevo es un ICONO o CARPETA
-                // No usamos highestZ para que no compita con las ventanas
-                event.target.style.zIndex = 500; // Se queda en la liga baja siempre
+                target.style.zIndex = 500;
             }
         },
         move(event) {
             const target = event.target;
             const x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
             const y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-            
-            // Fix para que la ventana gigante no salte al moverla
-            if (target.classList.contains('aero-window')) {
-                target.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
-            } else {
-                target.style.transform = `translate(${x}px, ${y}px)`;
-            }
-            
+
+            // Aplicamos el movimiento sin romper el margen negativo del CSS
+            target.style.transform = `translate(${x}px, ${y}px)`;
             target.setAttribute('data-x', x);
             target.setAttribute('data-y', y);
         },
