@@ -2,7 +2,7 @@
 
 body, html { 
     margin: 0; padding: 0; height: 100%; overflow: hidden; 
-    background: radial-gradient(circle at center, #700505, #180101); 
+    background: radial-gradient(circle at center, #9C0707, #180101); 
     font-family: 'Segoe UI', sans-serif; 
 }
 
