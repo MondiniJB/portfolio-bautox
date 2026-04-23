@@ -1,0 +1,40 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    background: #008080; /* El verde azulado clásico */
+    font-family: sans-serif;
+}
+
+#desktop {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+}
+
+.folder {
+    width: 100px;
+    text-align: center;
+    cursor: grab;
+    position: absolute;
+    padding: 10px;
+    user-select: none;
+    top: 20px; /* Posición inicial */
+    left: 20px;
+}
+
+.folder#folder2 { left: 120px; } /* Para que no se encimen */
+
+.icon {
+    font-size: 50px;
+}
+
+.label {
+    display: block;
+    color: white;
+    font-size: 14px;
+    margin-top: 5px;
+    background: rgba(0,0,0,0.3); /* Fondo para que se lea mejor */
+    border-radius: 3px;
+}
