@@ -2,11 +2,11 @@ let isDragging = false;
 let currentCategory = null;
 
 const content = {
-    tipo: [{img: 'https://picsum.photos/800/200?random=1'}],
-    branding: [{img: 'https://picsum.photos/800/200?random=2'}],
-    editorial: [{img: 'https://picsum.photos/800/200?random=3'}],
-    packaging: [{img: 'https://picsum.photos/800/200?random=4'}],
-    social: [{img: 'https://picsum.photos/800/200?random=5'}]
+    tipo: [{img: 'https://picsum.photos/600/800?random=1'}],
+    branding: [{img: 'https://picsum.photos/600/800?random=2'}],
+    editorial: [{img: 'https://picsum.photos/600/800?random=3'}],
+    packaging: [{img: 'https://picsum.photos/600/800?random=4'}],
+    social: [{img: 'https://picsum.photos/600/800?random=5'}]
 };
 
 window.onload = () => {
