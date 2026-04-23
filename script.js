@@ -1,123 +1,132 @@
 let isDragging = false;
-let openFolderId = null;
+let openFolderCategory = null;
 
-const projects = {
-    tipo: [{id: 1, img: 'https://picsum.photos/400/500?random=11'}, {id: 12, img: 'https://picsum.photos/400/500?random=12'}],
-    branding: [{id: 2, img: 'https://picsum.photos/400/500?random=21'}, {id: 22, img: 'https://picsum.photos/400/500?random=22'}],
-    editorial: [{id: 3, img: 'https://picsum.photos/400/500?random=31'}],
-    packaging: [{id: 4, img: 'https://picsum.photos/400/500?random=41'}],
-    social: [{id: 5, img: 'https://picsum.photos/400/500?random=51'}]
+// BASE DE DATOS ASIGNADA
+const content = {
+    tipo: [
+        {title: 'Tipografía 1', img: 'https://picsum.photos/600/800?random=10'},
+        {title: 'Tipografía 2', img: 'https://picsum.photos/600/800?random=11'}
+    ],
+    branding: [
+        {title: 'Branding 1', img: 'https://picsum.photos/600/800?random=20'},
+        {title: 'Branding 2', img: 'https://picsum.photos/600/800?random=21'}
+    ],
+    editorial: [
+        {title: 'Editorial 1', img: 'https://picsum.photos/600/800?random=30'}
+    ],
+    packaging: [
+        {title: 'Packaging 1', img: 'https://picsum.photos/600/800?random=40'}
+    ],
+    social: [
+        {title: 'Social 1', img: 'https://picsum.photos/600/800?random=50'}
+    ]
 };
 
-// 1. DESORDENAR CARPETAS AL CARGAR
-function randomizeFolders() {
-    const folders = document.querySelectorAll('.folder');
-    folders.forEach(folder => {
-        const margin = 0.15; // 15% de margen para que no se peguen a los bordes
-        const x = (window.innerWidth * margin) + (Math.random() * (window.innerWidth * (1 - margin * 2) - 100));
-        const y = (window.innerHeight * margin) + (Math.random() * (window.innerHeight * (1 - margin * 2) - 110));
-        
-        folder.style.left = x + 'px';
-        folder.style.top = y + 'px';
+// 1. Posiciones iniciales aleatorias para las carpetas
+window.onload = () => {
+    document.querySelectorAll('.folder').forEach(f => {
+        f.style.left = (Math.random() * 70 + 10) + '%';
+        f.style.top = (Math.random() * 70 + 10) + '%';
     });
-}
-
-// Ejecutar al cargar la página
-window.onload = randomizeFolders;
+};
 
 function toggleProject(category, element) {
     if (isDragging) return;
 
     const gallery = document.getElementById('floating-gallery');
     
-    if (openFolderId === category) {
-        closeAllCards(element);
+    // Si la carpeta ya estaba abierta, la cerramos
+    if (openFolderCategory === category) {
+        closeGallery(element);
         return;
     }
 
-    if (openFolderId) {
+    // Si hay otra carpeta abierta, la cerramos antes de abrir la nueva
+    if (openFolderCategory) {
         const prevFolder = document.querySelector('.folder.is-open');
-        if (prevFolder) closeAllCards(prevFolder);
+        if (prevFolder) closeGallery(prevFolder);
     }
 
-    openFolderId = category;
+    // Abrimos la nueva
+    openFolderCategory = category;
     element.classList.add('is-open');
-
     const rect = element.getBoundingClientRect();
 
-    projects[category].forEach((proj, index) => {
+    content[category].forEach((proj, index) => {
         const card = document.createElement('div');
         card.className = 'project-card draggable';
         
-        // Nacen desde la carpeta (escondidas)
+        // Empiezan "dentro" de la carpeta
         card.style.left = rect.left + 'px';
         card.style.top = rect.top + 'px';
-        card.style.transform = 'scale(0)';
+        card.style.transform = 'scale(0) rotate(0deg)';
         card.style.opacity = '0';
 
-        card.innerHTML = `<img src="${proj.img}">`;
-        card.onclick = () => { if (!isDragging) openFullscreen(proj); };
+        card.innerHTML = `<img src="${proj.img}" alt="${proj.title}">`;
+        card.onclick = (e) => {
+            e.stopPropagation();
+            if (!isDragging) openFullscreen(proj);
+        };
         
         gallery.appendChild(card);
 
-        // DISPERSIÓN CON MARGEN DEL 10%
+        // Dispersión con margen de 15%
         setTimeout(() => {
-            const margin = 0.10; // 10% de margen
-            const availableW = window.innerWidth * (1 - margin * 2);
-            const availableH = window.innerHeight * (1 - margin * 2);
+            const margin = 0.15;
+            const x = (window.innerWidth * margin) + (Math.random() * (window.innerWidth * (1 - margin * 2) - 250));
+            const y = (window.innerHeight * margin) + (Math.random() * (window.innerHeight * (1 - margin * 2) - 350));
             
-            // Calculamos posición aleatoria dentro del área central
-            const randomX = (window.innerWidth * margin) + (Math.random() * (availableW - 300));
-            const randomY = (window.innerHeight * margin) + (Math.random() * (availableH - 400));
-            
-            card.style.transform = 'scale(1)';
+            card.style.left = x + 'px';
+            card.style.top = y + 'px';
+            card.style.transform = `scale(1) rotate(${(Math.random() - 0.5) * 10}deg)`;
             card.style.opacity = '1';
-            card.style.left = randomX + 'px';
-            card.style.top = randomY + 'px';
-        }, 50);
+        }, 50 + (index * 100));
     });
 }
 
-function closeAllCards(folderElement) {
+function closeGallery(folderElement) {
     const cards = document.querySelectorAll('.project-card');
     const rect = folderElement.getBoundingClientRect();
 
     cards.forEach(card => {
         card.style.left = rect.left + 'px';
         card.style.top = rect.top + 'px';
-        card.style.transform = 'scale(0)';
+        card.style.transform = 'scale(0) rotate(0deg)';
         card.style.opacity = '0';
     });
 
     setTimeout(() => {
         document.getElementById('floating-gallery').innerHTML = '';
         folderElement.classList.remove('is-open');
-        openFolderId = null;
-    }, 600);
+        if (openFolderCategory === folderElement.id.replace('f-', '')) {
+            openFolderCategory = null;
+        }
+    }, 500);
 }
 
 function openFullscreen(proj) {
     const fs = document.getElementById('project-fullscreen');
     fs.style.display = 'flex';
-    document.getElementById('project-content').innerHTML = `<img src="${proj.img}" style="height:85vh; border: 5px solid white; border-radius:30px; box-shadow: 0 0 50px rgba(255,255,255,0.5);">`;
+    document.getElementById('project-content').innerHTML = `
+        <img src="${proj.img}" style="max-height:85vh; border-radius:20px; box-shadow:0 0 50px white;">
+        <h2 style="color:white; font-family:sans-serif; margin-top:15px;">${proj.title}</h2>
+    `;
 }
 
 function closeFullscreen() {
     document.getElementById('project-fullscreen').style.display = 'none';
 }
 
-// Drag and Drop (para carpetas y cards)
+// DRAG AND DROP
 interact('.draggable').draggable({
     listeners: {
         start() { isDragging = true; },
         move(event) {
             const target = event.target;
-            const x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
-            const y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-            target.style.transform += ` translate(${event.dx}px, ${event.dy}px)`;
-            // Guardamos la posición para no perderla
-            target.style.left = (parseFloat(target.style.left) + event.dx) + 'px';
-            target.style.top = (parseFloat(target.style.top) + event.dy) + 'px';
+            const x = (parseFloat(target.style.left) || 0) + event.dx;
+            const y = (parseFloat(target.style.top) || 0) + event.dy;
+            target.style.left = x + 'px';
+            target.style.top = y + 'px';
         },
         end() { setTimeout(() => { isDragging = false; }, 100); }
     }
