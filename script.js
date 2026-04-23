@@ -15,22 +15,48 @@ function openProject(category) {
     if (isDragging) return;
 
     const gallery = document.getElementById('floating-gallery');
-    gallery.innerHTML = ''; 
+
+    if (currentCategory === category) {
+        gallery.innerHTML = '';
+        currentCategory = null;
+        return;
+    }
+
+    gallery.innerHTML = '';
+    currentCategory = category;
 
     projects[category].forEach((proj, index) => {
         const card = document.createElement('div');
         card.className = 'project-card draggable';
         
-        // Centrado con pequeño offset
-        const centerX = window.innerWidth / 2;
-        const centerY = window.innerHeight / 2;
-        const offset = index * 40;
+        // --- CÁLCULO PARA EL 80% CENTRAL ---
+        
+        // 1. Definimos márgenes de seguridad (10% de cada lado = 20% total)
+        const marginX = window.innerWidth * 0.1;
+        const marginY = window.innerHeight * 0.1;
 
-        card.style.left = (centerX - 200 + offset) + 'px';
-        card.style.top = (centerY - 250 + offset) + 'px';
+        // 2. Definimos el área útil (el 80% central)
+        const usefulWidth = window.innerWidth * 0.8;
+        const usefulHeight = window.innerHeight * 0.8;
+
+        // 3. Calculamos posición aleatoria dentro de esa área útil
+        // Restamos un poco (ej: 200px) para compensar el tamaño de la propia card
+        const randomX = marginX + (Math.random() * (usefulWidth - 200));
+        const randomY = marginY + (Math.random() * (usefulHeight - 300));
+        
+        // Rotación leve
+        const randomRotate = (Math.random() - 0.5) * 15;
+
+        card.style.left = randomX + 'px';
+        card.style.top = randomY + 'px';
+        card.setAttribute('data-rot', randomRotate);
+        card.style.transform = `rotate(${randomRotate}deg)`;
         
         card.innerHTML = `<img src="${proj.img}" alt="${proj.title}">`;
-        card.onclick = () => { if (!isDragging) openFullscreen(proj); };
+        
+        card.onclick = () => {
+            if (!isDragging) openFullscreen(proj);
+        };
         
         gallery.appendChild(card);
     });
