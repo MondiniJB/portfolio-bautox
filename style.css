@@ -59,17 +59,25 @@ body, html {
 }
 
 .aero-window { 
-    width: 90vw; height: 80vh; max-width: 1100px; 
-    position: fixed; top: 50%; left: 50%; 
-    margin-left: -45vw; margin-top: -40vh;
-    background: rgba(255,255,255,0.3); backdrop-filter: blur(25px); 
-    border-radius: 35px; border: 2px solid white; 
-    display: flex; flex-direction: column; overflow: hidden;
+    width: 90vw; height: 80vh; max-width: 1100px; max-height: 750px;
+    background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(25px) saturate(150%);
+    border-radius: 30px; border: 2px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+    position: fixed; 
+    top: 50%; left: 50%; 
+    /* Usamos márgenes negativos para centrar sin transform */
+    margin-left: -45vw; margin-top: -40vh; 
+    display: flex; flex-direction: column; z-index: 9500; overflow: hidden;
+    user-select: none; /* Evita que se seleccione el texto al arrastrar */
+    animation: windowOpen 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-/* Ajuste para pantallas grandes */
+/* Ajuste para monitores grandes */
 @media (min-width: 1222px) { 
     .aero-window { margin-left: -550px; margin-top: -375px; } 
+}
+
+@keyframes windowOpen { from { opacity: 0; scale: 0.95; } to { opacity: 1; scale: 1; } }
 }
 
 .window-header { 
