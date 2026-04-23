@@ -86,7 +86,7 @@ body, html {
     display: flex; align-items: center; cursor: grab; 
 }
 
-.traffic-lights { display: flex; gap: 12px; margin-right: 20px; margin-top: 10px; }
+.traffic-lights { display: flex; gap: 12px; margin-left: 20px; margin-right: 20px; margin-top: 10px; }
 .light { width: 16px; height: 16px; border-radius: 50%; cursor: pointer; }
 .light.close { background: #ff5f56; }
 .light.minimize { background: #ffbd2e; }
@@ -99,7 +99,7 @@ body, html {
     border: 5px solid white; object-fit: cover; 
 }
 
-.window-title { color: white; font-size: 15px; font-weight: bold; margin-left: 10px; }
+.window-title { color: white; font-size: 15px; font-weight: bold; margin-left: 20px; margin-top: 10px; }
 
 /* Fullscreen */
 #project-fullscreen { 
