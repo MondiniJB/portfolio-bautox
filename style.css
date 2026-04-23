@@ -1,50 +1,77 @@
-/* (Mantener body y #desktop igual que antes) */
-body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background: radial-gradient(circle at center, #00b4db, #0083b0); font-family: 'Segoe UI', sans-serif; }
-#desktop { width: 100vw; height: 100vh; position: relative; }
+/* (Mantené el resto del código igual) */
 
-/* CARPETAS */
-.folder, .app-icon { width: 100px; height: 100px; text-align: center; cursor: pointer; position: absolute; display: flex; flex-direction: column; align-items: center; z-index: 100; }
-.icon { width: 70px; height: 50px; background: linear-gradient(180deg, #ffcc00, #ff9900); border-radius: 8px; position: relative; box-shadow: inset 0 2px 5px rgba(255,255,255,0.8), 0 4px 10px rgba(0,0,0,0.2); }
-.icon::before { content: ''; position: absolute; top: -8px; left: 8px; width: 25px; height: 8px; background: inherit; border-radius: 4px 4px 0 0; }
-
-/* NUEVO: ESTILO ICONO APP */
-.app-visual { width: 60px; height: 60px; background: linear-gradient(135deg, #ffffff, #a5a5a5); border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); border: 2px solid white; }
-
-.label { margin-top: 8px; color: white; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
-
-/* VENTANA AERO FRUTIGER */
+/* VENTANA AERO FRUTIGER GIGANTE */
 .aero-window {
-    width: 600px; height: 350px;
-    background: rgba(255, 255, 255, 0.4);
-    backdrop-filter: blur(20px);
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+    width: 90vw; /* 90% del ancho de pantalla */
+    height: 80vh; /* 80% del alto de pantalla */
+    max-width: 1200px; /* Límite para que no se deforme en monitores 4K */
+    max-height: 800px;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(25px) saturate(150%);
+    -webkit-backdrop-filter: blur(25px) saturate(150%);
+    border-radius: 30px; /* Bordes más redondeados para acompañar el tamaño */
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 40px 100px rgba(0,0,0,0.5);
     position: absolute;
-    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    top: 50%; left: 50%; 
+    transform: translate(-50%, -50%);
     display: flex; flex-direction: column;
     z-index: 9500;
     overflow: hidden;
-    animation: windowOpen 0.3s ease-out;
+    animation: windowOpen 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-@keyframes windowOpen { from { transform: translate(-50%, -40%) scale(0.9); opacity: 0; } to { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
+@keyframes windowOpen { 
+    from { transform: translate(-50%, -45%) scale(0.95); opacity: 0; } 
+    to { transform: translate(-50%, -50%) scale(1); opacity: 1; } 
+}
 
-/* HEADER Y SEMÁFORO */
-.window-header { padding: 10px; background: rgba(255,255,255,0.2); display: flex; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.3); }
-.traffic-lights { display: flex; gap: 8px; margin-right: 15px; }
-.light { width: 12px; height: 12px; border-radius: 50%; cursor: pointer; }
-.light.close { background: #ff5f56; }
-.light.minimize { background: #ffbd2e; }
-.light.maximize { background: #27c93f; }
-.window-title { color: white; font-size: 13px; font-weight: bold; }
+/* HEADER AJUSTADO */
+.window-header { 
+    padding: 20px; 
+    background: rgba(255,255,255,0.15); 
+    display: flex; 
+    align-items: center; 
+    border-bottom: 1px solid rgba(255,255,255,0.2); 
+}
 
-/* CONTENIDO SCROLLEABLE */
-.window-content { flex: 1; overflow-y: auto; padding: 20px; color: #111; }
-.bio-layout { display: flex; gap: 20px; align-items: flex-start; }
-.bio-photo { width: 120px; height: 120px; border-radius: 50%; border: 3px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-.bio-text { flex: 1; }
+.traffic-lights { display: flex; gap: 12px; margin-right: 25px; }
+.light { width: 18px; height: 18px; border-radius: 50%; cursor: pointer; }
+.window-title { color: white; font-size: 16px; letter-spacing: 1px; }
 
-/* (Mantener project-card y fullscreen igual que antes) */
-.project-card { height: 60vh; width: auto; aspect-ratio: 4/5; position: absolute; cursor: pointer; background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(8px); border: 2px solid rgba(255, 255, 255, 0.7); border-radius: 20px; z-index: 9000 !important; animation: flashPop 0.2s ease-out forwards; }
-@keyframes flashPop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+/* CONTENIDO SCROLLEABLE GIGANTE */
+.window-content { 
+    flex: 1; 
+    overflow-y: auto; 
+    padding: 50px; 
+    color: white; 
+}
+
+.bio-layout { 
+    display: flex; 
+    gap: 50px; 
+    align-items: center; /* Centrado vertical del contenido */
+}
+
+.bio-photo { 
+    width: 300px; /* Foto mucho más grande */
+    height: 300px; 
+    border-radius: 40px; 
+    border: 5px solid rgba(255,255,255,0.8); 
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3); 
+    object-fit: cover;
+}
+
+.bio-text { 
+    flex: 1; 
+    font-size: 20px; /* Texto más legible para el tamaño de ventana */
+    line-height: 1.6;
+}
+
+.bio-text h2 { 
+    font-size: 45px; 
+    margin-bottom: 20px; 
+    background: linear-gradient(to right, #fff, #a5d6ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
