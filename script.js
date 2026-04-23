@@ -2,7 +2,7 @@ let isDragging = false;
 let currentCategory = null;
 
 const content = {
-    tipo: [{img: 'https://picsum.photos/800/400?random=1'}],
+    tipo: [{img: 'https://picsum.photos/600/800?random=1'}],
     branding: [{img: 'https://picsum.photos/600/800?random=2'}],
     editorial: [{img: 'https://picsum.photos/600/800?random=3'}],
     packaging: [{img: 'https://picsum.photos/600/800?random=4'}],
