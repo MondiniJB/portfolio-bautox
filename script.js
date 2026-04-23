@@ -1,15 +1,13 @@
 let isDragging = false;
-let currentCategory = null;
 
 const projects = {
     tipo: [
         { id: 1, img: 'https://picsum.photos/600/800?random=1', title: 'Libro de Tipografía' },
-        { id: 2, img: 'https://picsum.photos/600/800?random=2', title: 'Afiche Bauhaus' },
-        { id: 3, img: 'https://picsum.photos/600/800?random=3', title: 'Sistema de Signos' }
+        { id: 2, img: 'https://picsum.photos/600/800?random=2', title: 'Manual de Estilo' }
     ],
     branding: [
-        { id: 4, img: 'https://picsum.photos/600/800?random=4', title: 'Logotipo CEVEDE' },
-        { id: 5, img: 'https://picsum.photos/600/800?random=5', title: 'Branding Chronos' }
+        { id: 3, img: 'https://picsum.photos/600/800?random=3', title: 'Logotipo CEVEDE' },
+        { id: 4, img: 'https://picsum.photos/600/800?random=4', title: 'Branding Chronos' }
     ]
 };
 
@@ -17,36 +15,22 @@ function openProject(category) {
     if (isDragging) return;
 
     const gallery = document.getElementById('floating-gallery');
-
-    if (currentCategory === category) {
-        gallery.innerHTML = '';
-        currentCategory = null;
-        return;
-    }
-
-    gallery.innerHTML = '';
-    currentCategory = category;
+    gallery.innerHTML = ''; 
 
     projects[category].forEach((proj, index) => {
         const card = document.createElement('div');
         card.className = 'project-card draggable';
         
-        // Dispersión aleatoria
-        const randomX = Math.random() * (window.innerWidth - 300) + 50;
-        const randomY = Math.random() * (window.innerHeight - 400) + 50;
-        const randomRotate = (Math.random() - 0.5) * 30; // Más rotación
+        // Centrado con pequeño offset
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+        const offset = index * 40;
 
-        card.style.left = randomX + 'px';
-        card.style.top = randomY + 'px';
-        // Guardamos la rotación en un atributo para no perderla al arrastrar
-        card.setAttribute('data-rot', randomRotate);
-        card.style.transform = `rotate(${randomRotate}deg)`;
+        card.style.left = (centerX - 200 + offset) + 'px';
+        card.style.top = (centerY - 250 + offset) + 'px';
         
         card.innerHTML = `<img src="${proj.img}" alt="${proj.title}">`;
-        
-        card.onclick = () => {
-            if (!isDragging) openFullscreen(proj);
-        };
+        card.onclick = () => { if (!isDragging) openFullscreen(proj); };
         
         gallery.appendChild(card);
     });
@@ -70,14 +54,10 @@ interact('.draggable').draggable({
             const target = event.target;
             const x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
             const y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-            const r = target.getAttribute('data-rot') || 0;
-
-            target.style.transform = `translate(${x}px, ${y}px) rotate(${r}deg)`;
+            target.style.transform = `translate(${x}px, ${y}px)`;
             target.setAttribute('data-x', x);
             target.setAttribute('data-y', y);
         },
-        end() {
-            setTimeout(() => { isDragging = false; }, 100);
-        }
+        end() { setTimeout(() => { isDragging = false; }, 100); }
     }
 });
