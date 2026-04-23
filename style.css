@@ -22,9 +22,9 @@ body, html {
 }
 
 /* Acá es donde personalizás tus carpetas subidas a GitHub */
-.folder-pink .icon-img { background-image: url('peluche.png'); background-color: rgba(255,182,193,0.3); border-radius: 15px; }
-.folder-raw .icon-img { background-image: url('raw.png'); background-color: rgba(136,136,136,0.3); border-radius: 15px; }
-.folder-cloud .icon-img { background-image: url('nube.png'); background-color: rgba(255,255,255,0.3); border-radius: 15px; }
+.folder-pink .icon-img { background-image: url('carpeta_peludo.png'); background-color: rgba(255,182,193,0); border-radius: 15px; }
+.folder-raw .icon-img { background-image: url('carpeta_raw.png'); background-color: rgba(136,136,136,0); border-radius: 15px; }
+.folder-cloud .icon-img { background-image: url('carpeta_glass.png'); background-color: rgba(255,255,255,0); border-radius: 15px; }
 .folder-chrome .icon-img { background-image: url('carpeta_cd.png'); background-color: rgba(255,255,255,0); border-radius: 15px; }
 
 .app-visual { 
