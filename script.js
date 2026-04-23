@@ -2,16 +2,15 @@ let isDragging = false;
 let currentCategory = null;
 
 const content = {
-    tipo: [{title: 'Tipo 1', img: 'https://picsum.photos/600/800?random=1'}, {title: 'Tipo 2', img: 'https://picsum.photos/600/800?random=11'}],
-    branding: [{title: 'Brand 1', img: 'https://picsum.photos/600/800?random=2'}, {title: 'Brand 2', img: 'https://picsum.photos/600/800?random=22'}],
-    editorial: [{title: 'Edi 1', img: 'https://picsum.photos/600/800?random=3'}],
-    packaging: [{title: 'Pack 1', img: 'https://picsum.photos/600/800?random=4'}],
-    social: [{title: 'Social 1', img: 'https://picsum.photos/600/800?random=5'}]
+    tipo: [{title: 'T1', img: 'https://picsum.photos/600/800?random=1'}, {title: 'T2', img: 'https://picsum.photos/600/800?random=11'}],
+    branding: [{title: 'B1', img: 'https://picsum.photos/600/800?random=2'}, {title: 'B2', img: 'https://picsum.photos/600/800?random=22'}],
+    editorial: [{title: 'E1', img: 'https://picsum.photos/600/800?random=3'}],
+    packaging: [{title: 'P1', img: 'https://picsum.photos/600/800?random=4'}],
+    social: [{title: 'S1', img: 'https://picsum.photos/600/800?random=5'}]
 };
 
 window.onload = () => {
     document.querySelectorAll('.folder').forEach(f => {
-        // Carpetas dispersas con margen
         const x = Math.random() * (window.innerWidth - 150) + 50;
         const y = Math.random() * (window.innerHeight - 150) + 50;
         f.style.left = x + 'px';
@@ -38,9 +37,9 @@ function toggleProject(category, element) {
         const card = document.createElement('div');
         card.className = 'project-card draggable';
         
-        // --- LÓGICA DE MÁRGENES 10% ---
+        // MÁRGENES 10%
         const margin = 0.10;
-        const cardWidth = window.innerHeight * 0.45; // Estimación del ancho basado en 60vh
+        const cardWidth = window.innerHeight * 0.45; 
         const cardHeight = window.innerHeight * 0.60;
 
         const minX = window.innerWidth * margin;
@@ -53,6 +52,10 @@ function toggleProject(category, element) {
         
         card.style.left = x + 'px';
         card.style.top = y + 'px';
+        
+        // Forzamos el frente en el estilo directo
+        card.style.zIndex = "9000";
+
         card.innerHTML = `<img src="${proj.img}">`;
         
         card.onclick = (e) => { 
@@ -76,7 +79,11 @@ function closeFullscreen() {
 
 interact('.draggable').draggable({
     listeners: {
-        start() { isDragging = true; },
+        start(event) { 
+            isDragging = true;
+            // Al empezar a mover, lo mandamos al frente de todo
+            event.target.style.zIndex = "9001";
+        },
         move(event) {
             const target = event.target;
             const x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
