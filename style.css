@@ -114,7 +114,10 @@ body, html {
 }
 
 #project-content img {
+    height: 80vh; /* 80% del alto de la pantalla */
+    width: auto;
     max-width: 90%;
+    object-fit: contain;
     border-radius: 10px;
-    margin-top: 20px;
+    box-shadow: 0 0 30px rgba(255, 0, 204, 0.2);
 }
