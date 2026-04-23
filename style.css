@@ -34,8 +34,8 @@ body, html {
 }
 
 .label { 
-    margin-top: 8px; color: white; font-weight: bold; 
-    text-shadow: 0 2px 5px rgba(0,0,0,0.8); background: rgba(0,0,0,0.2); 
+    margin-top: 4px; color: white; font-weight: bold; 
+    text-shadow: 0 2px 5px rgba(0,0,0,0.8); background: rgba(0,0,0,0); 
     padding: 2px 10px; border-radius: 10px; 
 }
 
