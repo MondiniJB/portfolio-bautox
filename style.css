@@ -13,7 +13,7 @@ body, html {
     text-align: center; cursor: pointer;
     position: absolute; display: flex;
     flex-direction: column; align-items: center;
-    z-index: 1000; /* Siempre arriba de las fotos */
+    z-index: 100; /* Bajamos un poco este para que la foto le gane */
 }
 
 .icon {
@@ -30,24 +30,27 @@ body, html {
 
 .label { margin-top: 8px; color: white; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 
-/* FOTOS FRUTIGER AERO */
+/* FOTOS FRUTIGER AERO - AL FRENTE */
 .project-card {
     height: 60vh; width: auto;
     aspect-ratio: 4/5;
     position: absolute;
     cursor: pointer;
-    background: rgba(255, 255, 255, 0.35);
-    backdrop-filter: blur(12px);
-    border: 2px solid rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(8px); /* Menos blur = más rápido */
+    border: 2px solid rgba(255, 255, 255, 0.7);
     border-radius: 20px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-    z-index: 500;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+    
+    /* PRIORIDAD MÁXIMA */
+    z-index: 9000 !important; 
+    
     overflow: hidden;
-    /* Animación más rápida */
-    animation: quickPop 0.3s ease-out forwards;
+    /* Animación ultra rápida */
+    animation: flashPop 0.2s ease-out forwards;
 }
 
-@keyframes quickPop {
+@keyframes flashPop {
     0% { transform: scale(0.8); opacity: 0; }
     100% { transform: scale(1); opacity: 1; }
 }
@@ -57,6 +60,6 @@ body, html {
 /* FULLSCREEN */
 #project-fullscreen {
     position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-    background: rgba(0,0,0,0.9); z-index: 9999;
+    background: rgba(0,0,0,0.95); z-index: 10000;
     display: flex; align-items: center; justify-content: center;
 }
