@@ -2,24 +2,28 @@ let isDragging = false;
 let currentCategory = null;
 let highestZ = 10000; 
 
+// --- BASE DE DATOS DE PROYECTOS (Con descripciones) ---
 const content = {
     branding: [
         { 
             name: 'Logo_CEVEDE.png', 
+            desc: 'Rebranding completo para Centro Veterinario de Derivación.',
             thumb: 'cevede_thumb.jpg', 
-            gallery: ['cevede_1.jpg', 'cevede_2.jpg', 'cevede_3.jpg'] 
+            img: 'cevede_full.jpg' 
         },
         { 
             name: 'Verboten_ID.jpg', 
+            desc: 'Identidad visual urbana para cápsula de indumentaria Verboten.',
             thumb: 'verboten_thumb.jpg', 
-            gallery: ['verboten_full.jpg'] 
+            img: 'verboten_full.jpg' 
         }
     ],
     tipo: [
         { 
             name: 'Typography_Book.pdf', 
-            thumb: 'carpeta_peludo.png', 
-            gallery: ['libro_1.jpg', 'libro_2.jpg'] 
+            desc: 'Desarrollo editorial sobre la historia y grilla tipográfica.',
+            thumb: 'book_thumb.jpg', 
+            img: 'book_full.jpg' 
         }
     ],
     editorial: [],
@@ -55,12 +59,9 @@ window.onload = () => {
     });
 };
 
-// --- FUNCIÓN PARA ABRIR CARPETAS ---
+// --- FUNCIÓN PARA ABRIR CARPETAS COMO GALERÍAS VERTICALES ---
 function toggleProject(category, element) {
     if (isDragging) return;
-    
-    // Limpiar imágenes previas al cambiar de carpeta
-    clearImages();
     
     const win = document.getElementById('about-window');
     const winTitle = win.querySelector('.window-title');
@@ -68,23 +69,27 @@ function toggleProject(category, element) {
 
     winTitle.innerText = `C:\\Proyectos\\${category.toUpperCase()}`;
     
-    let gridHtml = `<div class="folder-grid">`;
+    // Generar layout vertical de proyectos
+    let galleryHtml = `<div class="project-gallery-container">`;
     if (content[category] && content[category].length > 0) {
         content[category].forEach(file => {
             const projectData = JSON.stringify(file).replace(/"/g, '&quot;');
-            gridHtml += `
-                <div class="file-item" onclick="flyProjectImages(${projectData})">
-                    <div class="file-icon" style="background-image: url('${file.thumb}')"></div>
-                    <span class="file-label">${file.name}</span>
+            galleryHtml += `
+                <div class="project-file-item" onclick="openFullscreen(${projectData})">
+                    <div class="project-file-icon" style="background-image: url('${file.thumb}')"></div>
+                    <div class="project-file-info">
+                        <div class="project-file-name">${file.name}</div>
+                        <div class="project-file-desc">${file.desc}</div>
+                    </div>
                 </div>
             `;
         });
     } else {
-        gridHtml += `<p style="opacity:0.5; grid-column: 1/-1; text-align:center; padding-top:20px;">Carpeta vacía</p>`;
+        galleryHtml += `<p style="opacity:0.3; text-align:center; padding: 40px; font-size:14px;">Carpeta vacía</p>`;
     }
+    galleryHtml += `</div>`;
     
-    gridHtml += `</div>`;
-    winContent.innerHTML = gridHtml;
+    winContent.innerHTML = galleryHtml;
     
     win.style.display = 'flex';
     win.setAttribute('data-x', 0);
@@ -95,79 +100,44 @@ function toggleProject(category, element) {
     win.style.zIndex = highestZ; 
 }
 
-// --- FUNCIÓN DE EXPLOSIÓN DE IMÁGENES (PRIORIDAD ALTA) ---
-function flyProjectImages(project) {
-    if (isDragging) return;
-    
-    const gallery = document.getElementById('floating-gallery');
-    // Mantenemos las fotos anteriores o limpiamos según prefieras. 
-    // Aquí limpio para que no se saturen:
-    gallery.innerHTML = ''; 
-    
-    project.gallery.forEach(imgUrl => {
-        const card = document.createElement('div');
-        card.className = 'project-card draggable aero-blur'; 
-        
-        const x = (window.innerWidth * 0.2) + (Math.random() * (window.innerWidth * 0.4));
-        const y = (window.innerHeight * 0.2) + (Math.random() * (window.innerHeight * 0.3));
-        
-        // Z-INDEX CRÍTICO: 50.000 para que nada las tape
-        highestZ += 10;
-        card.style.left = x + 'px'; 
-        card.style.top = y + 'px'; 
-        card.style.zIndex = 50000 + highestZ; 
-        
-        card.innerHTML = `<img src="${imgUrl}">`;
-        card.onclick = (e) => { 
-            e.stopPropagation();
-            if (!isDragging) openFullscreen({img: imgUrl}); 
-        };
-        
-        card.setAttribute('data-x', 0);
-        card.setAttribute('data-y', 0);
-        gallery.appendChild(card);
-    });
-}
-
-// --- FUNCIONES DE CIERRE SINCRONIZADO ---
-function closeAbout() { 
-    document.getElementById('about-window').style.display = 'none'; 
-    clearImages(); // Al cerrar la ventana, se van las fotos
-}
-
-function clearImages() {
-    document.getElementById('floating-gallery').innerHTML = '';
-}
-
-function closeFromOutside(event) {
-    if (event.target.id === 'desktop') { 
-        closeAbout(); 
-    }
-}
-
-// --- BIOGRAFÍA ---
+// --- FUNCIÓN PARA LA BIOGRAFÍA (RELLENA Y CORREGIDA) ---
 function openAbout(event) {
     if (event) event.stopPropagation();
     if (isDragging) return;
     
-    clearImages();
     const win = document.getElementById('about-window');
     const winContent = win.querySelector('.window-content');
     
     win.querySelector('.window-title').innerText = "Biografía.exe";
+    
+    // HTML Completo de la biografía, calcando el diseño de referencia
     winContent.innerHTML = `
-        <div class="bio-container">
-            <div class="bio-header">
-                <img src="user_icon.png" class="bio-photo-circle">
-                <h1>¡Hola! Soy Bautox!</h1>
+        <div class="bio-container-scrolleable">
+            <img src="user_icon.png" class="bio-photo-large">
+            
+            <h1 class="bio-title-ref">¡Hola! Soy Bautox!</h1>
+            <p class="bio-intro-ref">Soy diseñador gráfico profesional y estudiante universitario. Este espacio es mi escritorio interactivo donde conviven la semiótica visual y mi pasión por el hardware.</p>
+            
+            <div class="bio-divider"></div>
+            
+            <div class="bio-section-ref">
+                <h2>Perfil Profesional</h2>
+                <p>Me especializo en crear identidades visuales con fundamentos teóricos sólidos, aplicando grillas tipográficas y sistemas de signos funcionales.</p>
+                <p>Mi enfoque combina la precisión técnica con la creatividad visual, buscando siempre soluciones que comuniquen con claridad y eficiencia.</p>
             </div>
-            <div class="bio-body">
-                <section>
-                    <h3>Perfil Profesional</h3>
-                    <p>Soy diseñador gráfico profesional y estudiante universitario.</p>
-                </section>
+            
+            <div class="bio-section-ref">
+                <h2>Experiencia y Pasiones</h2>
+                <p>A lo largo de mi carrera universitaria, he explorado diversas ramas del diseño, desde el packaging funcional hasta la maquetación editorial compleja.</p>
+                <p>Mi portfolio refleja esa dualidad: la atención al detalle del diseño de hardware y la expresividad del Branding contemporáneo.</p>
+                <p>¡Explorá las carpetas en el escritorio para conocer mis trabajos en Branding, Editorial y Packaging!</p>
             </div>
-        </div>`;
+            
+            <div class="bio-divider"></div>
+            
+            <p style="opacity:0.5; font-size:14px;">Bautox Portfolio OS v1.0 | Lomas de Zamora, Argentina</p>
+        </div>
+    `;
     
     win.style.display = 'flex';
     win.setAttribute('data-x', 0);
@@ -176,6 +146,14 @@ function openAbout(event) {
     
     highestZ++;
     win.style.zIndex = highestZ;
+}
+
+function closeAbout() { document.getElementById('about-window').style.display = 'none'; }
+
+function closeFromOutside(event) {
+    if (event.target.id === 'desktop') { 
+        closeAbout(); 
+    }
 }
 
 function openFullscreen(proj) {
@@ -191,12 +169,7 @@ interact('.draggable').draggable({
         start(event) {
             isDragging = true;
             highestZ++;
-            // Si es una foto, mantenemos el rango de 50k, si es ventana el de 10k
-            if (event.target.classList.contains('project-card')) {
-                event.target.style.zIndex = 50000 + highestZ;
-            } else {
-                event.target.style.zIndex = highestZ;
-            }
+            event.target.style.zIndex = highestZ;
         },
         move(event) {
             const target = event.target;
