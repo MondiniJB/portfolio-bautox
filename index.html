@@ -35,8 +35,6 @@
             <span class="label">Sobre Mí</span>
         </div>
 
-        <div id="floating-gallery"></div>
-
         <div id="about-window" class="aero-window draggable" style="display:none;" onclick="event.stopPropagation()">
             <div class="window-header">
                 <div class="traffic-lights">
@@ -44,15 +42,14 @@
                     <span class="light minimize"></span>
                     <span class="light maximize"></span>
                 </div>
-                <span class="window-title">Cargando...</span>
+                <span class="window-title">C:\Proyectos</span>
             </div>
-            
             <div class="window-content"></div>
         </div>
     </div>
 
-    <div id="project-fullscreen" style="display:none;" onclick="closeFullscreen()">
-        <button class="close-fs">✕</button>
+    <div id="project-fullscreen" style="display:none;" onclick="handleFullscreenClick(event)">
+        <button class="close-fs" onclick="closeFullscreen()">✕</button>
         <div id="project-content"></div>
     </div>
 
