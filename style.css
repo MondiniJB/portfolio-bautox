@@ -100,7 +100,7 @@ body, html {
 /* --- GRID DE ARCHIVOS (CARPETAS) --- */
 .folder-grid { 
     display: grid; 
-    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); 
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); 
     gap: 25px; 
 }
 .file-item { 
@@ -109,8 +109,12 @@ body, html {
 }
 .file-item:hover { background: rgba(255,255,255,0.15); }
 .file-icon { 
-    width: 70px; height: 70px; background-size: cover; 
-    background-position: center; border-radius: 8px; margin-bottom: 10px;
+    width: 110px;  /* Nuevo ancho */
+    height: 110px; /* Nuevo alto */
+    background-size: cover; 
+    background-position: center; 
+    border-radius: 8px; 
+    margin-bottom: 10px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 .file-label { color: white; font-size: 11px; text-align: center; word-break: break-all; opacity: 0.9; }
