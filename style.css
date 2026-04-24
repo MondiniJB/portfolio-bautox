@@ -79,18 +79,20 @@ body, html {
 
 .carousel-item {
     flex: 0 0 auto;
-    height: 90vh; /* Máximo 2 a lo alto se logra con el aspecto de la imagen */
-    margin: 0 20px;
+    height: 100vh; 
     display: flex;
-    flex-wrap: wrap; /* Permite que si hay muchas fotos se acomoden */
-    max-width: 80vw;
+    flex-direction: column; /* Apila de a 2 si hace falta */
+    justify-content: center;
+    margin: 0 40px;
 }
 
 .carousel-item img {
-    height: 40vh; /* Para que entren 2 a lo alto */
+    max-height: 40vh; /* Permite que entren 2 a lo alto */
     width: auto;
-    object-fit: contain;
-    margin: 10px;
+    object-fit: contain; /* No deforma la imagen */
+    margin: 15px 0;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.1);
 }
 
 .close-fs { 
