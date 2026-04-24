@@ -91,28 +91,42 @@ function openAbout(event) {
     const win = document.getElementById('about-window');
     const winContent = win.querySelector('.window-content');
     
-    // 1. Título correcto
     win.querySelector('.window-title').innerText = "Biografía.exe";
     
-    // 2. Contenido Vertical Exacto
-    // Usamos 'user_icon.png' que está en tu repo.
+    // Contenido expandido para forzar el scroll y mejorar el diseño
     winContent.innerHTML = `
-        <div class="bio-layout-vertical">
-            <img src="user_icon.png" class="bio-photo-vertical">
-            <div class="bio-text-vertical">
+        <div class="bio-container">
+            <div class="bio-header">
+                <img src="user_icon.png" class="bio-photo-circle">
                 <h1>¡Hola! Soy Bautox!</h1>
-                <p>Soy diseñador gráfico profesional y estudiante universitario.</p>
+            </div>
+            
+            <div class="bio-body">
+                <section>
+                    <h3>Perfil Profesional</h3>
+                    <p>Soy diseñador gráfico profesional y estudiante universitario. Este espacio es mi escritorio interactivo donde conviven mis proyectos y mi pasión por el hardware.</p>
+                    <p>Me especializo en crear identidades visuales con ideas sólidas, aplicando tipografías y sistemas de signos funcionales.</p>
+                </section>
+
+                <section>
+                    <h3>Mi Enfoque</h3>
+                    <p>Creo en el diseño que comunica con claridad. Mi proceso combina la teoría de la semiótica visual con las tendencias técnicas actuales, buscando siempre un equilibrio entre lo estético y lo funcional.</p>
+                </section>
+
+                <section>
+                    <h3>Intereses</h3>
+                    <p>Más allá del diseño, paso gran parte de mi tiempo explorando el mundo del hardware y la optimización de sistemas. Mi portfolio refleja esa dualidad: la precisión técnica y la creatividad visual.</p>
+                    <p>¡Explorá las carpetas en el escritorio para conocer mis trabajos en Branding, Editorial y Packaging!</p>
+                </section>
             </div>
         </div>
     `;
     
-    // 3. Abrir ventana y resetear posición/transform
     win.style.display = 'flex';
     win.setAttribute('data-x', 0);
     win.setAttribute('data-y', 0);
     win.style.transform = 'translate(0px, 0px)';
     
-    // 4. Asegurar que esté al frente de todo
     highestZ++;
     win.style.zIndex = highestZ;
 }
