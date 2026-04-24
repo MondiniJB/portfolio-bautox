@@ -1,42 +1,51 @@
 let isDragging = false;
-let currentCategory = null;
 let highestZ = 10000; 
 
-// --- BASE DE DATOS DE PROYECTOS (Actualizada para Carrusel) ---
+// --- BASE DE DATOS CON IMÁGENES DE STOCK (Picsum) ---
 const content = {
     branding: [
         { 
             name: 'Logo_CEVEDE.png', 
-            desc: 'Rebranding completo para Centro Veterinario de Derivación.',
-            thumb: 'cevede_thumb.jpg', 
-            // Poné aquí todas las fotos que quieras que giren en el carrusel
-            gallery: ['cevede_1.jpg', 'cevede_2.jpg', 'cevede_3.jpg', 'cevede_4.jpg'] 
+            desc: 'Rebranding completo - Centro Veterinario.',
+            thumb: 'https://picsum.photos/200/200?random=1', 
+            gallery: [
+                'https://picsum.photos/800/600?random=11', // Horizontal
+                'https://picsum.photos/400/800?random=12', // Vertical
+                'https://picsum.photos/800/800?random=13', // Cuadrada
+                'https://picsum.photos/1200/800?random=14' // Wide
+            ] 
         },
         { 
             name: 'Verboten_ID.jpg', 
             desc: 'Identidad visual urbana Verboten.',
-            thumb: 'verboten_thumb.jpg', 
-            gallery: ['verboten_full.jpg', 'verboten_2.jpg'] 
+            thumb: 'https://picsum.photos/200/200?random=2', 
+            gallery: [
+                'https://picsum.photos/600/800?random=21',
+                'https://picsum.photos/900/600?random=22',
+                'https://picsum.photos/800/1200?random=23'
+            ] 
         }
     ],
     tipo: [
         { 
             name: 'Typography_Book.pdf', 
-            desc: 'Desarrollo editorial sobre la historia tipográfica.',
-            thumb: 'book_thumb.jpg', 
-            gallery: ['book_1.jpg', 'book_2.jpg', 'book_3.jpg'] 
+            desc: 'Desarrollo editorial tipográfico.',
+            thumb: 'https://picsum.photos/200/200?random=3', 
+            gallery: [
+                'https://picsum.photos/1000/700?random=31',
+                'https://picsum.photos/700/1000?random=32'
+            ] 
         }
     ],
     editorial: [],
     packaging: []
 };
 
-// --- POSICIONAMIENTO INICIAL (Se mantiene igual) ---
 window.onload = () => {
     const items = document.querySelectorAll('.folder, .app-icon');
     const positions = [];
     const margin = 0.15;
-    const minDistance = 160; 
+    const minDistance = 180; 
 
     items.forEach(item => {
         let x, y, collision;
@@ -60,21 +69,16 @@ window.onload = () => {
     });
 };
 
-// --- FUNCIÓN PARA ABRIR CARPETAS (Modificada para llamar al Carrusel) ---
-function toggleProject(category, element) {
+function toggleProject(category) {
     if (isDragging) return;
-    
     const win = document.getElementById('about-window');
-    const winTitle = win.querySelector('.window-title');
     const winContent = win.querySelector('.window-content');
-
-    winTitle.innerText = `C:\\Proyectos\\${category.toUpperCase()}`;
+    win.querySelector('.window-title').innerText = `C:\\Proyectos\\${category.toUpperCase()}`;
     
     let galleryHtml = `<div class="project-gallery-container">`;
     if (content[category] && content[category].length > 0) {
         content[category].forEach(file => {
             const projectData = JSON.stringify(file).replace(/"/g, '&quot;');
-            // Ahora al hacer click llamamos a openInfiniteGallery
             galleryHtml += `
                 <div class="project-file-item" onclick="openInfiniteGallery(${projectData})">
                     <div class="project-file-icon" style="background-image: url('${file.thumb}')"></div>
@@ -86,34 +90,28 @@ function toggleProject(category, element) {
             `;
         });
     } else {
-        galleryHtml += `<p style="opacity:0.3; text-align:center; padding: 40px; font-size:14px;">Carpeta vacía</p>`;
+        galleryHtml += `<p style="opacity:0.3; text-align:center; padding: 40px;">Carpeta vacía</p>`;
     }
     galleryHtml += `</div>`;
-    
     winContent.innerHTML = galleryHtml;
     win.style.display = 'flex';
-    win.setAttribute('data-x', 0);
-    win.setAttribute('data-y', 0);
-    win.style.transform = 'translate(0px, 0px)';
-    
     highestZ++;
     win.style.zIndex = highestZ; 
 }
 
-// --- LÓGICA DEL CARRUSEL INFINITO ---
+// --- LÓGICA DEL CARRUSEL INFINITO CORREGIDA ---
 let scrollPos = 0;
-let autoScrollSpeed = 0.6; // Velocidad de giro
+let autoScrollSpeed = 0.6;
 let animationId;
+let isUserDraggingCarousel = false;
 
 function openInfiniteGallery(project) {
     const fs = document.getElementById('project-fullscreen');
     const contentArea = document.getElementById('project-content');
     
-    // Creamos el track del carrusel
     const track = document.createElement('div');
-    track.className = 'carousel-track draggable';
+    track.className = 'carousel-track draggable-carousel'; // Nueva clase específica
     
-    // Triplicamos las imágenes para el efecto infinito
     const fullGallery = [...project.gallery, ...project.gallery, ...project.gallery];
     
     track.innerHTML = fullGallery.map(img => `
@@ -129,12 +127,18 @@ function openInfiniteGallery(project) {
     scrollPos = 0;
     startAutoScroll(track);
 
-    // Hacer que el carrusel sea arrastrable lateralmente
-    interact(track).draggable({
+    // --- ARRASTRE DEL CARRUSEL ---
+    interact('.draggable-carousel').draggable({
         listeners: {
+            start() { 
+                isUserDraggingCarousel = true; 
+            },
             move(event) {
                 scrollPos += event.dx;
                 track.style.transform = `translateX(${scrollPos}px)`;
+            },
+            end() { 
+                isUserDraggingCarousel = false; 
             }
         }
     });
@@ -142,20 +146,18 @@ function openInfiniteGallery(project) {
 
 function startAutoScroll(track) {
     function step() {
-        scrollPos -= autoScrollSpeed; 
-        
-        // Si llegamos a un tercio del recorrido, reseteamos al centro para que sea infinito
-        if (Math.abs(scrollPos) >= track.scrollWidth / 3) {
-            scrollPos = 0;
+        if (!isUserDraggingCarousel) {
+            scrollPos -= autoScrollSpeed; 
+            if (Math.abs(scrollPos) >= track.scrollWidth / 3) {
+                scrollPos = 0;
+            }
+            track.style.transform = `translateX(${scrollPos}px)`;
         }
-        
-        track.style.transform = `translateX(${scrollPos}px)`;
         animationId = requestAnimationFrame(step);
     }
     animationId = requestAnimationFrame(step);
 }
 
-// --- BIOGRAFÍA (Se mantiene igual) ---
 function openAbout(event) {
     if (event) event.stopPropagation();
     if (isDragging) return;
@@ -166,36 +168,23 @@ function openAbout(event) {
         <div class="bio-container-scrolleable">
             <img src="user_icon.png" class="bio-photo-large">
             <h1 class="bio-title-ref">¡Hola! Soy Bautox!</h1>
-            <p class="bio-intro-ref">Soy diseñador gráfico profesional y estudiante universitario...</p>
-            <div class="bio-divider"></div>
-            <div class="bio-section-ref">
-                <h2>Perfil Profesional</h2>
-                <p>Me especializo en crear identidades visuales con fundamentos teóricos sólidos...</p>
-            </div>
-            <div class="bio-divider"></div>
-            <p style="opacity:0.5; font-size:14px;">Bautox Portfolio OS v1.0 | Lomas de Zamora, Argentina</p>
+            <p class="bio-intro-ref">Diseñador gráfico y apasionado por el hardware.</p>
         </div>
     `;
     win.style.display = 'flex';
-    win.setAttribute('data-x', 0);
-    win.setAttribute('data-y', 0);
-    win.style.transform = 'translate(0px, 0px)';
     highestZ++;
     win.style.zIndex = highestZ;
 }
 
 function closeAbout() { document.getElementById('about-window').style.display = 'none'; }
-
-function closeFromOutside(event) {
-    if (event.target.id === 'desktop') { closeAbout(); }
-}
+function closeFromOutside(event) { if (event.target.id === 'desktop') { closeAbout(); } }
 
 function closeFullscreen() {
     cancelAnimationFrame(animationId);
     document.getElementById('project-fullscreen').style.display = 'none';
 }
 
-// --- ARRASTRE DE VENTANAS E ICONOS ---
+// --- ARRASTRE DE VENTANAS E ICONOS (Global) ---
 interact('.draggable').draggable({
     listeners: {
         start(event) {
