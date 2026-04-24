@@ -1,6 +1,6 @@
 let isDragging = false;
 let currentCategory = null;
-let highestZ = 10000;
+let highestZ = 10000; 
 
 // --- BASE DE DATOS DE PROYECTOS ---
 const content = {
@@ -27,7 +27,7 @@ const content = {
     packaging: []
 };
 
-// --- POSICIONAMIENTO INICIAL DE ICONOS ---
+// --- POSICIONAMIENTO INICIAL ---
 window.onload = () => {
     const items = document.querySelectorAll('.folder, .app-icon');
     const positions = [];
@@ -60,8 +60,8 @@ window.onload = () => {
 function toggleProject(category, element) {
     if (isDragging) return;
     
-    const gallery = document.getElementById('floating-gallery');
-    gallery.innerHTML = '';
+    // Limpiar escritorio al cambiar de carpeta
+    document.getElementById('floating-gallery').innerHTML = '';
     
     const win = document.getElementById('about-window');
     const winTitle = win.querySelector('.window-title');
@@ -93,10 +93,10 @@ function toggleProject(category, element) {
     win.style.transform = 'translate(0px, 0px)';
     
     highestZ++;
-    win.style.zIndex = highestZ; // Las ventanas se abren en el nivel actual
+    win.style.zIndex = highestZ; // La ventana queda en el nivel de los 10k
 }
 
-// --- FUNCIÓN CORREGIDA: IMÁGENES POR DELANTE ---
+// --- FUNCIÓN CORREGIDA: PRIORIDAD ABSOLUTA A LAS FOTOS ---
 function flyProjectImages(project) {
     if (isDragging) return;
     
@@ -111,11 +111,12 @@ function flyProjectImages(project) {
         const x = (window.innerWidth * margin) + (Math.random() * (window.innerWidth * 0.4));
         const y = (window.innerHeight * margin) + (Math.random() * (window.innerHeight * 0.3));
         
-        // CRÍTICO: Aseguramos que el z-index sea MUCHO más alto que la ventana
-        highestZ += 10; 
+        highestZ++;
         card.style.left = x + 'px'; 
         card.style.top = y + 'px'; 
-        card.style.zIndex = highestZ + 5000; 
+        
+        // ASIGNAMOS UN Z-INDEX EN EL RANGO DE LOS 20.000 (Siempre por encima de la ventana)
+        card.style.zIndex = highestZ + 20000; 
         
         card.innerHTML = `<img src="${imgUrl}">`;
         card.onclick = (e) => { 
@@ -184,9 +185,15 @@ interact('.draggable').draggable({
     listeners: {
         start(event) {
             isDragging = true;
-            highestZ += 20;
-            // Al arrastrar, siempre traer al frente de todo
-            event.target.style.zIndex = highestZ + 10000;
+            highestZ++;
+            
+            // Si lo que arrastramos es una foto, mantenemos su rango de 20k
+            if (event.target.classList.contains('project-card')) {
+                event.target.style.zIndex = highestZ + 20000;
+            } else {
+                // Si es la ventana, se queda en el rango de 10k
+                event.target.style.zIndex = highestZ;
+            }
         },
         move(event) {
             const target = event.target;
