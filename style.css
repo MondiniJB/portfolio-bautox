@@ -10,7 +10,7 @@ body, html {
 .folder, .app-icon { 
     width: 110px; height: 140px; text-align: center; cursor: pointer; 
     position: absolute; display: flex; flex-direction: column; align-items: center;
-    z-index: 100 !important; /* Siempre abajo de las ventanas/fotos */
+    z-index: 100 !important;
 }
 .icon-img { width: 110px; height: 110px; background-size: contain; background-repeat: no-repeat; background-position: center; }
 
@@ -26,13 +26,11 @@ body, html {
 /* --- VENTANA AERO (ESTILO OS) --- */
 .aero-window { 
     width: 80vw; height: 75vh; max-width: 900px; max-height: 700px;
-    background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(25px);
-    border-radius: 20px; border: 1px solid rgba(255,255,255,0.2);
-    box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-    position: fixed; 
-    top: 50%; left: 50%;
-    margin-left: -40vw; 
-    margin-top: -37.5vh; 
+    background: rgba(15, 15, 15, 0.7); backdrop-filter: blur(30px) saturate(180%);
+    border-radius: 25px; border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+    position: fixed; top: 50%; left: 50%;
+    margin-left: -40vw; margin-top: -37.5vh; 
     display: none; flex-direction: column; z-index: 9000; overflow: hidden;
     animation: windowOpen 0.3s ease-out;
 }
@@ -41,82 +39,107 @@ body, html {
 @media (min-height: 933px) { .aero-window { margin-top: -350px; } }
 
 .window-header { 
-    padding: 12px 20px; background: rgba(0,0,0,0.4); 
+    padding: 15px 25px; background: rgba(0,0,0,0.4); 
     display: flex; align-items: center; cursor: grab; 
     border-bottom: 1px solid rgba(255,255,255,0.1);
 }
-.traffic-lights { display: flex; gap: 8px; margin-right: 15px; }
+.traffic-lights { display: flex; gap: 9px; margin-right: 18px; }
 .light { width: 13px; height: 13px; border-radius: 50%; }
 .light.close { background: #ff5f56; cursor: pointer; }
 .light.minimize { background: #ffbd2e; }
 .light.maximize { background: #27c93f; }
-.window-title { color: white; font-size: 12px; font-weight: bold; opacity: 0.7; letter-spacing: 0.5px; }
+.window-title { color: white; font-size: 13px; font-weight: bold; opacity: 0.7; letter-spacing: 0.5px; }
 
-/* CONTENIDO DE VENTANAS */
+/* --- CONTENIDO CON SCROLL (GALERÍA/BIOGRAFÍA) --- */
 .window-content { 
     flex: 1; 
-    overflow-y: auto; 
-    padding: 30px; 
+    overflow-y: auto; /* IMPORTANTE: Esto activa el scroll */
+    padding: 0; /* Quitamos padding para que la galería toque los bordes si es necesario */
     color: white; 
 }
-.window-content::-webkit-scrollbar { width: 6px; }
-.window-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
 
-/* --- ESTILOS FOTOS FLOTANTES (PROJECT-CARD ORIGINAL) --- */
-.project-card { 
-    height: 55vh; width: 40vh; /* Mantengo tus proporciones verticales originales */
-    position: absolute; cursor: pointer; 
-    background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(12px); 
-    border-radius: 25px; border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 30px 70px rgba(0,0,0,0.5);
-    overflow: hidden; 
-    z-index: 9500 !important; /* Capa por encima de las ventanas */
-    animation: quickPop 0.2s ease-out;
+/* Scrollbar estética tipo Aero */
+.window-content::-webkit-scrollbar { width: 8px; }
+.window-content::-webkit-scrollbar-track { background: transparent; }
+.window-content::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
+
+/* --- NUEVO LAYOUT DE GALERÍA DE PROYECTOS (Vertical) --- */
+.project-gallery-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
-.project-card img { 
-    width: 100%; height: 100%; object-fit: cover; 
-    pointer-events: none; /* Permite arrastrar la card */
+.project-file-item {
+    display: flex;
+    align-items: center;
+    padding: 20px 40px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.project-file-item:hover { background: rgba(255, 255, 255, 0.05); }
+
+.project-file-icon {
+    width: 110px; height: 110px;
+    border-radius: 15px;
+    background-size: cover; background-position: center;
+    margin-right: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.1);
 }
 
-/* --- ESTILOS DE LA BIOGRAFÍA (SOBRE MÍ) --- */
-.bio-container { max-width: 600px; margin: 0 auto; text-align: center; }
-.bio-header { margin-bottom: 30px; }
-.bio-photo-circle { 
-    width: 150px; height: 150px; border-radius: 50%; 
-    object-fit: cover; border: 4px solid rgba(255,255,255,0.1);
-    margin-bottom: 15px;
-}
-.bio-body section { margin-bottom: 30px; text-align: left; }
-.bio-body h3 { font-size: 1.2rem; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; }
-.bio-body p { font-size: 1rem; line-height: 1.6; opacity: 0.8; margin-bottom: 10px; }
+.project-file-info { flex: 1; }
+.project-file-name { font-size: 18px; font-weight: bold; color: white; margin-bottom: 5px; }
+.project-file-desc { font-size: 14px; color: rgba(255, 255, 255, 0.6); }
 
-/* --- GRID DE ARCHIVOS (DENTRO DE VENTANAS - 110px) --- */
-.folder-grid { 
-    display: grid; 
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); 
-    gap: 25px; 
+/* --- LAYOUT CORREGIDO DE LA BIOGRAFÍA (Idéntico a la referencia) --- */
+.bio-container-scrolleable {
+    padding: 60px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    line-height: 1.7;
 }
-.file-item { 
-    width: 130px; display: flex; flex-direction: column; align-items: center; 
-    cursor: pointer; padding: 10px; border-radius: 12px;
-}
-.file-item:hover { background: rgba(255,255,255,0.15); }
-.file-icon { 
-    width: 110px; height: 110px; background-size: cover; 
-    background-position: center; border-radius: 12px; margin-bottom: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-}
-.file-label { color: white; font-size: 11px; text-align: center; word-break: break-all; opacity: 0.9; }
 
-/* FULLSCREEN DE UNA SOLA IMAGEN */
-#project-fullscreen { 
-    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
-    background: rgba(0,0,0,0.95); z-index: 20000; display: none; align-items: center; justify-content: center; 
+.bio-photo-large {
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 40px;
+    border: 5px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
 }
-#project-content img { max-height: 85vh; border-radius: 12px; border: 3px solid white; }
+
+.bio-title-ref {
+    font-size: 36px; font-weight: bold; color: white;
+    margin: 0 0 15px 0;
+}
+
+.bio-intro-ref {
+    font-size: 16px; color: rgba(255, 255, 255, 0.7);
+    max-width: 550px;
+    margin: 0 0 50px 0;
+}
+
+.bio-divider {
+    width: 100%; max-width: 600px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 40px;
+}
+
+.bio-section-ref {
+    text-align: left;
+    width: 100%; max-width: 600px;
+    margin-bottom: 40px;
+}
+.bio-section-ref h2 { font-size: 16px; font-weight: bold; color: #ff5f56; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; }
+.bio-section-ref p { font-size: 16px; color: rgba(255, 255, 255, 0.8); margin-bottom: 15px; }
+
+/* Fullscreen */
+#project-fullscreen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.95); z-index: 20000; display: none; align-items: center; justify-content: center; }
+#project-content img { max-height: 85vh; border-radius: 12px; border: 3px solid white; box-shadow: 0 0 100px rgba(0,0,0,0.8); }
 .close-fs { position: absolute; top: 20px; right: 20px; background: none; border: none; color: white; font-size: 30px; cursor: pointer; }
 
-/* ANIMACIONES */
 @keyframes windowOpen { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
-@keyframes quickPop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
