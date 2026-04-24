@@ -8,11 +8,24 @@ body, html {
 
 /* --- ICONOS ESCRITORIO --- */
 .folder, .app-icon { 
-    width: 100px; height: 110px; text-align: center; cursor: pointer; 
-    position: absolute; display: flex; flex-direction: column; align-items: center;
+    width: 110px;  /* Nuevo ancho */
+    height: 130px; /* Un poco más de alto para que entre bien el texto */
+    text-align: center; 
+    cursor: pointer; 
+    position: absolute; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center;
     z-index: 100 !important;
 }
-.icon-img { width: 75px; height: 75px; background-size: contain; background-repeat: no-repeat; background-position: center; }
+
+.icon-img { 
+    width: 110px;  /* Imagen al ancho total solicitado */
+    height: 110px; /* Imagen al alto total solicitado */
+    background-size: contain; 
+    background-repeat: no-repeat; 
+    background-position: center; 
+}
 
 /* Rutas de tus imágenes en GitHub */
 .folder-pink .icon-img { background-image: url('carpeta_peludo.png'); }
