@@ -4,15 +4,15 @@ body, html {
     font-family: 'Segoe UI', Tahoma, sans-serif; 
 }
 
-#desktop { width: 100vw; height: 100vh; position: relative; }
+#desktop { width: 100vw; height: 100vh; position: relative; z-index: 1; }
 
 /* ICONOS ESCRITORIO */
 .folder, .app-icon { 
     width: 100px; height: 110px; text-align: center; cursor: pointer; 
     position: absolute; display: flex; flex-direction: column; align-items: center;
-    z-index: 100;
+    z-index: 100 !important; /* Siempre abajo de las ventanas */
 }
-.icon-img { width: 70px; height: 70px; background-size: contain; background-repeat: no-repeat; background-position: center; }
+.icon-img { width: 75px; height: 75px; background-size: contain; background-repeat: no-repeat; background-position: center; }
 
 .folder-pink .icon-img { background-image: url('carpeta_peludo.png'); }
 .folder-raw .icon-img { background-image: url('carpeta_raw.png'); }
@@ -20,58 +20,91 @@ body, html {
 .folder-chrome .icon-img { background-image: url('carpeta_cd.png'); }
 .app-icon .icon-img { background-image: url('user_icon.png'); }
 
-.label { margin-top: 5px; color: white; font-weight: 500; text-shadow: 0 1px 3px black; font-size: 13px; }
+.label { margin-top: 5px; color: white; font-weight: 500; text-shadow: 0 1px 4px black; font-size: 13px; }
 
-/* VENTANA AERO */
+/* --- VENTANA AERO (CORREGIDO EL CENTRADO) --- */
 .aero-window { 
-    width: 80vw; height: 70vh; max-width: 900px; 
-    background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(20px);
-    border-radius: 15px; border: 1px solid rgba(255,255,255,0.2);
-    box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-    position: fixed; top: 50%; left: 50%;
-    margin-left: -40vw; margin-top: -35vh;
+    width: 80vw; height: 75vh; max-width: 900px; max-height: 700px;
+    background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(25px);
+    border-radius: 20px; border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+    position: fixed; 
+    
+    /* Centrado compatible con interact.js y transform: translate(0,0) */
+    top: 50%; left: 50%;
+    margin-left: -40vw; /* Mitad del width */
+    margin-top: -37.5vh; /* Mitad del height */
+    
     display: none; flex-direction: column; z-index: 9000; overflow: hidden;
+    animation: windowOpen 0.3s ease-out;
 }
 
-@media (min-width: 1100px) { .aero-window { margin-left: -450px; } }
+/* Ajuste centrado para monitores grandes */
+@media (min-width: 1125px) { 
+    .aero-window { margin-left: -450px; } 
+}
+@media (min-height: 933px) {
+    .aero-window { margin-top: -350px; }
+}
 
 .window-header { 
     padding: 12px 20px; background: rgba(0,0,0,0.3); 
     display: flex; align-items: center; cursor: grab; 
+    border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 .traffic-lights { display: flex; gap: 8px; margin-right: 15px; }
-.light { width: 12px; height: 12px; border-radius: 50%; }
+.light { width: 13px; height: 13px; border-radius: 50%; }
 .light.close { background: #ff5f56; cursor: pointer; }
 .light.minimize { background: #ffbd2e; }
 .light.maximize { background: #27c93f; }
 .window-title { color: white; font-size: 13px; font-weight: bold; opacity: 0.8; }
 
-/* GRID DE ARCHIVOS TIPO WINDOWS */
-.window-content { flex: 1; overflow-y: auto; padding: 25px; }
+.window-content { flex: 1; overflow-y: auto; padding: 30px; color: white; }
+
+/* --- ESTILOS ESPECÍFICOS PARA "SOBRE MÍ" (Layout Vertical de tu foto) --- */
+.bio-layout-vertical {
+    display: flex;
+    flex-direction: column; /* Una cosa abajo de la otra */
+    align-items: center; /* Centrado horizontal */
+    justify-content: center; /* Centrado vertical */
+    height: 100%;
+    text-align: center;
+}
+
+.bio-photo-vertical {
+    width: 200px; height: 200px;
+    border-radius: 50%; /* Foto redonda */
+    object-fit: cover;
+    margin-bottom: 30px; /* Separación con el texto */
+    border: 5px solid rgba(255,255,255,0.1);
+}
+
+.bio-text-vertical h1 { margin: 0; font-size: 32px; font-weight: bold; }
+.bio-text-vertical p { margin: 10px 0 0 0; font-size: 16px; opacity: 0.8; }
+
+/* GRID DE ARCHIVOS (Para las carpetas, lo mantenemos igual) */
 .folder-grid { 
     display: grid; 
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); 
-    gap: 20px; 
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); 
+    gap: 25px; 
 }
 .file-item { 
     display: flex; flex-direction: column; align-items: center; 
-    cursor: pointer; padding: 10px; border-radius: 8px;
-    transition: background 0.2s;
+    cursor: pointer; padding: 10px; border-radius: 10px;
 }
 .file-item:hover { background: rgba(255,255,255,0.1); }
 .file-icon { 
-    width: 60px; height: 60px; background-size: cover; 
-    background-position: center; border-radius: 5px; margin-bottom: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    width: 70px; height: 70px; background-size: cover; 
+    background-position: center; border-radius: 8px; margin-bottom: 10px;
 }
 .file-label { color: white; font-size: 11px; text-align: center; word-break: break-all; }
 
-/* FULLSCREEN */
+/* FULLSCREEN (mantenemos igual) */
 #project-fullscreen { 
     position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
     background: rgba(0,0,0,0.9); z-index: 20000; display: none; align-items: center; justify-content: center; 
 }
-#project-content img { max-height: 85vh; border-radius: 10px; border: 2px solid white; }
+#project-content img { max-height: 85vh; border-radius: 12px; border: 3px solid white; }
 .close-fs { position: absolute; top: 20px; right: 20px; background: none; border: none; color: white; font-size: 30px; cursor: pointer; }
 
 @keyframes windowOpen { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
