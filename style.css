@@ -6,7 +6,7 @@ body, html {
 
 #desktop { width: 100vw; height: 100vh; position: relative; z-index: 1; }
 
-/* --- ICONOS ESCRITORIO (110px) --- */
+/* --- ICONOS ESCRITORIO --- */
 .folder, .app-icon { 
     width: 110px; height: 140px; text-align: center; cursor: pointer; 
     position: absolute; display: flex; flex-direction: column; align-items: center;
@@ -14,7 +14,6 @@ body, html {
 }
 .icon-img { width: 110px; height: 110px; background-size: contain; background-repeat: no-repeat; background-position: center; }
 
-/* Rutas de tus imágenes en GitHub */
 .folder-pink .icon-img { background-image: url('carpeta_peludo.png'); }
 .folder-raw .icon-img { background-image: url('carpeta_raw.png'); }
 .folder-cloud .icon-img { background-image: url('carpeta_glass.png'); }
@@ -23,123 +22,79 @@ body, html {
 
 .label { margin-top: 5px; color: white; font-weight: 500; text-shadow: 0 1px 4px black; font-size: 13px; }
 
-/* --- VENTANA AERO (ESTILO OS) --- */
+/* --- VENTANA EXPLORADOR (WINDOWS STYLE) --- */
 .aero-window { 
     width: 80vw; height: 75vh; max-width: 900px; max-height: 700px;
-    background: rgba(15, 15, 15, 0.7); backdrop-filter: blur(30px) saturate(180%);
-    border-radius: 25px; border: 1px solid rgba(255,255,255,0.15);
-    box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+    background: rgba(15, 15, 15, 0.8); backdrop-filter: blur(25px);
+    border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.5);
     position: fixed; top: 50%; left: 50%;
     margin-left: -40vw; margin-top: -37.5vh; 
     display: none; flex-direction: column; z-index: 9000; overflow: hidden;
-    animation: windowOpen 0.3s ease-out;
 }
 
 @media (min-width: 1125px) { .aero-window { margin-left: -450px; } }
-@media (min-height: 933px) { .aero-window { margin-top: -350px; } }
 
 .window-header { 
-    padding: 15px 25px; background: rgba(0,0,0,0.4); 
+    padding: 10px 15px; background: #202020; 
     display: flex; align-items: center; cursor: grab; 
-    border-bottom: 1px solid rgba(255,255,255,0.1);
 }
-.traffic-lights { display: flex; gap: 9px; margin-right: 18px; }
-.light { width: 13px; height: 13px; border-radius: 50%; }
+.traffic-lights { display: flex; gap: 8px; margin-right: 15px; }
+.light { width: 12px; height: 12px; border-radius: 50%; }
 .light.close { background: #ff5f56; cursor: pointer; }
 .light.minimize { background: #ffbd2e; }
 .light.maximize { background: #27c93f; }
-.window-title { color: white; font-size: 13px; font-weight: bold; opacity: 0.7; letter-spacing: 0.5px; }
+.window-title { color: #ccc; font-size: 12px; }
 
-/* --- CONTENIDO CON SCROLL (GALERÍA/BIOGRAFÍA) --- */
-.window-content { 
-    flex: 1; 
-    overflow-y: auto; /* IMPORTANTE: Esto activa el scroll */
-    padding: 0; /* Quitamos padding para que la galería toque los bordes si es necesario */
-    color: white; 
+.window-content { flex: 1; overflow-y: auto; padding: 20px; }
+
+/* GRID DE ARCHIVOS DENTRO DE CARPETA */
+.folder-grid { 
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 20px; 
+}
+.file-item { 
+    display: flex; flex-direction: column; align-items: center; cursor: pointer; padding: 10px; border-radius: 5px;
+}
+.file-item:hover { background: rgba(255,255,255,0.1); }
+.file-icon { 
+    width: 110px; height: 110px; background-size: cover; background-position: center; border-radius: 5px; margin-bottom: 8px;
+}
+.file-label { color: white; font-size: 12px; text-align: center; }
+
+/* --- VISOR DE GALERÍA INFINITA (FONDO NEGRO) --- */
+#project-fullscreen { 
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+    background: #000; z-index: 20000; display: none; overflow: hidden; 
 }
 
-/* Scrollbar estética tipo Aero */
-.window-content::-webkit-scrollbar { width: 8px; }
-.window-content::-webkit-scrollbar-track { background: transparent; }
-.window-content::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
-
-/* --- NUEVO LAYOUT DE GALERÍA DE PROYECTOS (Vertical) --- */
-.project-gallery-container {
+.carousel-track {
     display: flex;
-    flex-direction: column;
-    width: 100%;
-}
-
-.project-file-item {
-    display: flex;
+    height: 100%;
     align-items: center;
-    padding: 20px 40px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    cursor: pointer;
-    transition: background 0.2s;
-}
-.project-file-item:hover { background: rgba(255, 255, 255, 0.05); }
-
-.project-file-icon {
-    width: 110px; height: 110px;
-    border-radius: 15px;
-    background-size: cover; background-position: center;
-    margin-right: 30px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-    border: 1px solid rgba(255,255,255,0.1);
+    cursor: grab;
+    will-change: transform;
 }
 
-.project-file-info { flex: 1; }
-.project-file-name { font-size: 18px; font-weight: bold; color: white; margin-bottom: 5px; }
-.project-file-desc { font-size: 14px; color: rgba(255, 255, 255, 0.6); }
+.carousel-track:active { cursor: grabbing; }
 
-/* --- LAYOUT CORREGIDO DE LA BIOGRAFÍA (Idéntico a la referencia) --- */
-.bio-container-scrolleable {
-    padding: 60px 40px;
+.carousel-item {
+    flex: 0 0 auto;
+    height: 90vh; /* Máximo 2 a lo alto se logra con el aspecto de la imagen */
+    margin: 0 20px;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    line-height: 1.7;
+    flex-wrap: wrap; /* Permite que si hay muchas fotos se acomoden */
+    max-width: 80vw;
 }
 
-.bio-photo-large {
-    width: 180px; height: 180px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 40px;
-    border: 5px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+.carousel-item img {
+    height: 40vh; /* Para que entren 2 a lo alto */
+    width: auto;
+    object-fit: contain;
+    margin: 10px;
 }
 
-.bio-title-ref {
-    font-size: 36px; font-weight: bold; color: white;
-    margin: 0 0 15px 0;
+.close-fs { 
+    position: absolute; top: 20px; right: 30px; background: rgba(255,255,255,0.2); 
+    border: none; color: white; font-size: 24px; cursor: pointer; z-index: 21000;
+    width: 50px; height: 50px; border-radius: 50%;
 }
-
-.bio-intro-ref {
-    font-size: 16px; color: rgba(255, 255, 255, 0.7);
-    max-width: 550px;
-    margin: 0 0 50px 0;
-}
-
-.bio-divider {
-    width: 100%; max-width: 600px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    margin-bottom: 40px;
-}
-
-.bio-section-ref {
-    text-align: left;
-    width: 100%; max-width: 600px;
-    margin-bottom: 40px;
-}
-.bio-section-ref h2 { font-size: 16px; font-weight: bold; color: #ff5f56; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; }
-.bio-section-ref p { font-size: 16px; color: rgba(255, 255, 255, 0.8); margin-bottom: 15px; }
-
-/* Fullscreen */
-#project-fullscreen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.95); z-index: 20000; display: none; align-items: center; justify-content: center; }
-#project-content img { max-height: 85vh; border-radius: 12px; border: 3px solid white; box-shadow: 0 0 100px rgba(0,0,0,0.8); }
-.close-fs { position: absolute; top: 20px; right: 20px; background: none; border: none; color: white; font-size: 30px; cursor: pointer; }
-
-@keyframes windowOpen { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
