@@ -35,7 +35,7 @@ window.onload = () => {
             y = (window.innerHeight * margin) + Math.random() * (window.innerHeight * (1 - margin * 2) - 120);
             for (let pos of positions) {
                 const dist = Math.hypot(x - pos.x, y - pos.y);
-                if (dist < 130) { collision = true; break; }
+                if (dist < 160) { collision = true; break; }
             }
             attempts++;
         } while (collision && attempts < 100);
