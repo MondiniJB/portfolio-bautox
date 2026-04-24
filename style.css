@@ -6,14 +6,15 @@ body, html {
 
 #desktop { width: 100vw; height: 100vh; position: relative; z-index: 1; }
 
-/* ICONOS ESCRITORIO */
+/* --- ICONOS ESCRITORIO --- */
 .folder, .app-icon { 
     width: 100px; height: 110px; text-align: center; cursor: pointer; 
     position: absolute; display: flex; flex-direction: column; align-items: center;
-    z-index: 100 !important; /* Siempre abajo de las ventanas */
+    z-index: 100 !important;
 }
 .icon-img { width: 75px; height: 75px; background-size: contain; background-repeat: no-repeat; background-position: center; }
 
+/* Rutas de tus imágenes en GitHub */
 .folder-pink .icon-img { background-image: url('carpeta_peludo.png'); }
 .folder-raw .icon-img { background-image: url('carpeta_raw.png'); }
 .folder-cloud .icon-img { background-image: url('carpeta_glass.png'); }
@@ -22,33 +23,25 @@ body, html {
 
 .label { margin-top: 5px; color: white; font-weight: 500; text-shadow: 0 1px 4px black; font-size: 13px; }
 
-/* --- VENTANA AERO (CORREGIDO EL CENTRADO) --- */
+/* --- VENTANA AERO (ESTILO OS) --- */
 .aero-window { 
     width: 80vw; height: 75vh; max-width: 900px; max-height: 700px;
     background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(25px);
     border-radius: 20px; border: 1px solid rgba(255,255,255,0.2);
     box-shadow: 0 30px 60px rgba(0,0,0,0.5);
     position: fixed; 
-    
-    /* Centrado compatible con interact.js y transform: translate(0,0) */
     top: 50%; left: 50%;
-    margin-left: -40vw; /* Mitad del width */
-    margin-top: -37.5vh; /* Mitad del height */
-    
+    margin-left: -40vw; 
+    margin-top: -37.5vh; 
     display: none; flex-direction: column; z-index: 9000; overflow: hidden;
     animation: windowOpen 0.3s ease-out;
 }
 
-/* Ajuste centrado para monitores grandes */
-@media (min-width: 1125px) { 
-    .aero-window { margin-left: -450px; } 
-}
-@media (min-height: 933px) {
-    .aero-window { margin-top: -350px; }
-}
+@media (min-width: 1125px) { .aero-window { margin-left: -450px; } }
+@media (min-height: 933px) { .aero-window { margin-top: -350px; } }
 
 .window-header { 
-    padding: 12px 20px; background: rgba(0,0,0,0.3); 
+    padding: 12px 20px; background: rgba(0,0,0,0.4); 
     display: flex; align-items: center; cursor: grab; 
     border-bottom: 1px solid rgba(255,255,255,0.1);
 }
@@ -57,32 +50,41 @@ body, html {
 .light.close { background: #ff5f56; cursor: pointer; }
 .light.minimize { background: #ffbd2e; }
 .light.maximize { background: #27c93f; }
-.window-title { color: white; font-size: 13px; font-weight: bold; opacity: 0.8; }
+.window-title { color: white; font-size: 12px; font-weight: bold; opacity: 0.7; letter-spacing: 0.5px; }
 
-.window-content { flex: 1; overflow-y: auto; padding: 30px; color: white; }
-
-/* --- ESTILOS ESPECÍFICOS PARA "SOBRE MÍ" (Layout Vertical de tu foto) --- */
-.bio-layout-vertical {
-    display: flex;
-    flex-direction: column; /* Una cosa abajo de la otra */
-    align-items: center; /* Centrado horizontal */
-    justify-content: center; /* Centrado vertical */
-    height: 100%;
-    text-align: center;
+/* --- CONTENIDO CON SCROLL --- */
+.window-content { 
+    flex: 1; 
+    overflow-y: auto; /* IMPORTANTE: Activa el scroll vertical */
+    padding: 30px; 
+    color: white; 
+    scroll-behavior: smooth;
 }
 
-.bio-photo-vertical {
-    width: 200px; height: 200px;
-    border-radius: 50%; /* Foto redonda */
-    object-fit: cover;
-    margin-bottom: 30px; /* Separación con el texto */
-    border: 5px solid rgba(255,255,255,0.1);
+/* Scrollbar estética tipo Aero */
+.window-content::-webkit-scrollbar { width: 8px; }
+.window-content::-webkit-scrollbar-track { background: transparent; }
+.window-content::-webkit-scrollbar-thumb { 
+    background: rgba(255, 255, 255, 0.2); 
+    border-radius: 10px; 
 }
 
-.bio-text-vertical h1 { margin: 0; font-size: 32px; font-weight: bold; }
-.bio-text-vertical p { margin: 10px 0 0 0; font-size: 16px; opacity: 0.8; }
+/* --- ESTILOS DE LA BIOGRAFÍA (SOBRE MÍ) --- */
+.bio-container { max-width: 650px; margin: 0 auto; text-align: center; }
+.bio-header { margin-bottom: 35px; }
+.bio-photo-circle { 
+    width: 160px; height: 160px; border-radius: 50%; 
+    object-fit: cover; border: 4px solid rgba(255,255,255,0.1);
+    margin-bottom: 20px;
+}
+.bio-body section { margin-bottom: 40px; text-align: left; }
+.bio-body h3 { 
+    font-size: 1.3rem; margin-bottom: 15px; 
+    border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px;
+}
+.bio-body p { font-size: 1.05rem; line-height: 1.6; opacity: 0.85; margin-bottom: 15px; }
 
-/* GRID DE ARCHIVOS (Para las carpetas, lo mantenemos igual) */
+/* --- GRID DE ARCHIVOS (CARPETAS) --- */
 .folder-grid { 
     display: grid; 
     grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); 
@@ -90,16 +92,17 @@ body, html {
 }
 .file-item { 
     display: flex; flex-direction: column; align-items: center; 
-    cursor: pointer; padding: 10px; border-radius: 10px;
+    cursor: pointer; padding: 12px; border-radius: 12px; transition: 0.2s;
 }
-.file-item:hover { background: rgba(255,255,255,0.1); }
+.file-item:hover { background: rgba(255,255,255,0.15); }
 .file-icon { 
     width: 70px; height: 70px; background-size: cover; 
     background-position: center; border-radius: 8px; margin-bottom: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
-.file-label { color: white; font-size: 11px; text-align: center; word-break: break-all; }
+.file-label { color: white; font-size: 11px; text-align: center; word-break: break-all; opacity: 0.9; }
 
-/* FULLSCREEN (mantenemos igual) */
+/* Fullscreen de imágenes */
 #project-fullscreen { 
     position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
     background: rgba(0,0,0,0.9); z-index: 20000; display: none; align-items: center; justify-content: center; 
